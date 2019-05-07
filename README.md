@@ -17,8 +17,8 @@ przekształceń zapisuje do plików.
 
 ___
 
-<b>Przekształcenia morfologiczne: </b>
-* Otwarcie elementem kołowym o zadanym promieniu.
+<b>Przekształcenia morfologiczne (mono + logiczne): </b>
+* Zamknięcie elementem linijnym o zadanej długości i nachyleniu.
 
 ___
 
