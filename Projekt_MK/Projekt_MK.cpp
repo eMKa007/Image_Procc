@@ -8,7 +8,8 @@ int main( int argc, char* argv[])
 	try
 	{
 		String^ FilePath = gcnew String( ReadArgument(argc, argv[1]) );
-		
+		EProcess Pick = PickProcess();
+
 	}
 	catch ( const char* Ex )
 	{

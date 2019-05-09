@@ -5,10 +5,10 @@
 enum class EProcess
 {
 	None,
-	EHistogramEqualization,
-	EOrdfilt2,
+	EAutoTreshold,
+	EKirshFiltration,
 	ELinearClosure,
-	EGeodeticDistanceMap
+	EConvexSurr
 };
 
 /*	----------------------------------------------------------

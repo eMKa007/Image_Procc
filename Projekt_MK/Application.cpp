@@ -23,40 +23,64 @@ String^ ReadArgument(int argc, char* InputArgument)
 EProcess PickProcess()
 {
 	printf("Choose desired process: <0-4>\n");
-	printf("\t11. Histogram Equalization to Gauss decomposition with specifed standard deviation.\n");
-	printf("\t12. Ordfilt2 with specified mask and starting number.\n");
-	printf("\t13. Image closure with linear element (specified lenght and pitch.\n");
-	printf("\t14. Geodethic distance map from specified point.\n");
-	printf("\t\n10. Do nothing, exit program.\n");
+	printf("\t1. Automatic tresholding with max entrophy method (RGB or Mono image).\n");
+	printf("\t2. Kirsch filtering. Symmetric reflection (RGB or Mono image).\n");
+	printf("\t3. Image closure with linear element (Mono or Binary image).\n");
+	printf("\t4. Convex surrounding. (Binary Image)\n");
+	printf("\n\t0. Do nothing, exit program.\n");
 
-	EProcess Choice = EProcess::None;
-	bool Picked = false;
+	int			Choice	= 5;
+	bool		Picked	= false;
+	EProcess	EChoice = EProcess::None;
 
 	while (!Picked)
 	{
-		printf("\nEnter desired proccess number: ");
+		printf("\nEnter valid desired proccess number: ");
 		
-		/// TODO : Fix input !!!
-		cin >> Choice;
-
-		switch (Choice)
+		cin >> Choice;		///TODO: Prompt user if input is not a number (eg. letter)
+		EChoice = static_cast<EProcess>( Choice );
+		
+		switch (EChoice)
 		{
-		case EProcess::None:;
+			case EProcess::None:
+			{
 
-		case EProcess::EHistogramEqualization:;
+				Picked = true;
+			} break;
 
-		case EProcess::EOrdfilt2:;
+			case EProcess::EAutoTreshold:
+			{
 
-		case EProcess::ELinearClosure:;
+				Picked = true;
+			} break;
 
-		case EProcess::EGeodeticDistanceMap:;
+			case EProcess::EKirshFiltration:
+			{
 
-		default: //Pick valid value
-			break;
+				Picked = true;
+			} break;
+
+			case EProcess::ELinearClosure:
+			{
+
+				Picked = true;
+			} break;
+
+			case EProcess::EConvexSurr:
+			{
+
+				Picked = true;
+			} break;
+
+			default:
+			{
+
+				printf("\nPlease enter valid number. <0-4>");
+			} break;
 		}
-
 	}
-	return EProcess();
+
+	return EChoice;
 }
 
 
