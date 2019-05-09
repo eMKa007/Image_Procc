@@ -8,7 +8,7 @@ int main( int argc, char* argv[])
 	try
 	{
 		String^ FilePath = gcnew String( ReadArgument(argc, argv[1]) );
-		EProcess Pick = PickProcess();
+		int Pick = PickProcess();
 
 	}
 	catch ( const char* Ex )
@@ -17,9 +17,6 @@ int main( int argc, char* argv[])
 		printf("\nException catched: %s\n\n", Ex);
 		printf("|===========================================|\n\n");
 	}
-
-
-
 
 
     return 0;

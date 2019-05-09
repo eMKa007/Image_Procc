@@ -24,10 +24,9 @@ String^ ReadArgument(int argc, char* InputArgument);
 *	Function name:	PickProcess
 *	Parameters:		None
 *	Used to:		Interact with user to choose desired image proccess.
-*	Return:			Enumeration of choosed process.
+*	Return:			Process id.
 */
-EProcess PickProcess();
-
+int PickProcess();
 
 /*	----------------------------------------------------------
 *	Function name:	PrintUsage
@@ -36,3 +35,16 @@ EProcess PickProcess();
 *	Return:			None. 
 */
 void PrintUsage();
+
+
+
+
+/* -------------------  Auxiliary Functions -------------------  */
+
+/*	----------------------------------------------------------
+*	Function name:	PrintChoiceInfo
+*	Parameters:		None.
+*	Used to:		Print to console information Choice() function.
+*	Return:			None.
+*/
+void PrintChoiceInfo();
