@@ -6,14 +6,13 @@ przekształceń zapisuje do plików.
 * Dozwolone jest korzystanie z gotowej implementacji FFT w wersji 1D.
 
 <b>Przekształcenia punktowe/geometryczne (RGB + mono):</b> 
-* Automatyczne progowanie metodą maksymalnej entropii.
+* Wyrównanie histogramu do rozkładu Gaussa o zadanym odchyleniu.
 
 ***
 
 <b>Filtracja przestrzenna (RGB + mono): </b> 
-* Filtracja Kirscha.
-* Brzegowe odbicie symetryczne.
-* Dla RGB każda warstwa osobno.
+* Ordfilt2 dla zadanego rozmiaru maski i zadanego numeru początkowego.
+* (Dla RGB każda warstwa osobno)
 
 ___
 
@@ -23,6 +22,6 @@ ___
 ___
 
 <b>Przekształcenia logiczne: </b>
-* Wypukłe otoczenie.
+* Mapa odległości geodezyjnej od zadanego punktu wewnątrz obiektu.
 
 ___
