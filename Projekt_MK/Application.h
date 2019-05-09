@@ -4,6 +4,7 @@
 
 enum class EProcess
 {
+	None,
 	EHistogramEqualization,
 	EOrdfilt2,
 	ELinearClosure,
@@ -18,6 +19,14 @@ enum class EProcess
 */
 String^ ReadArgument(int argc, char* InputArgument);
 
+
+/*	----------------------------------------------------------
+*	Function name:	PickProcess
+*	Parameters:		None
+*	Used to:		Interact with user to choose desired image proccess.
+*	Return:			Enumeration of choosed process.
+*/
+EProcess PickProcess();
 
 
 /*	----------------------------------------------------------

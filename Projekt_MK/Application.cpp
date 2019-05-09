@@ -20,6 +20,45 @@ String^ ReadArgument(int argc, char* InputArgument)
 	return Temp;
 }
 
+EProcess PickProcess()
+{
+	printf("Choose desired process: <0-4>\n");
+	printf("\t11. Histogram Equalization to Gauss decomposition with specifed standard deviation.\n");
+	printf("\t12. Ordfilt2 with specified mask and starting number.\n");
+	printf("\t13. Image closure with linear element (specified lenght and pitch.\n");
+	printf("\t14. Geodethic distance map from specified point.\n");
+	printf("\t\n10. Do nothing, exit program.\n");
+
+	EProcess Choice = EProcess::None;
+	bool Picked = false;
+
+	while (!Picked)
+	{
+		printf("\nEnter desired proccess number: ");
+		
+		/// TODO : Fix input !!!
+		cin >> Choice;
+
+		switch (Choice)
+		{
+		case EProcess::None:;
+
+		case EProcess::EHistogramEqualization:;
+
+		case EProcess::EOrdfilt2:;
+
+		case EProcess::ELinearClosure:;
+
+		case EProcess::EGeodeticDistanceMap:;
+
+		default: //Pick valid value
+			break;
+		}
+
+	}
+	return EProcess();
+}
+
 
 
 
