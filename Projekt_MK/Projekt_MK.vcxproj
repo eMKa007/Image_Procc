@@ -153,16 +153,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Application.cpp" />
     <ClCompile Include="Projekt_MK.cpp" />
+    <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\AutoTresholding.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Application.h" />
-    <ClInclude Include="Headers.h" />
+    <ClInclude Include="include\Application.h" />
+    <ClInclude Include="include\AutoTresholding.h" />
+    <ClInclude Include="include\Headers.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,5 +1,5 @@
 
-#include "Application.h"
+#include "../include/Application.h"
 
 String^ ReadArgument(int argc, char* InputArgument)
 {
@@ -43,6 +43,49 @@ int PickProcess()
 	}
 
 	return Choice;
+}
+
+Bitmap^ ReadImage(String ^ FilePath)
+{
+	Bitmap^ bmp;
+	bmp = gcnew Bitmap(FilePath, true);
+
+	if (!bmp || bmp->Height == 0 || bmp->Width == 0)
+		throw "Invalid input image. Select valid one please.";
+
+	return bmp;
+}
+
+void Start(Bitmap^ Image, int Pick)
+{
+	EProcess Process = static_cast<EProcess>(Pick);
+	switch (Process)
+	{
+		case EProcess::EAutoTreshold:
+		{
+
+		} break;
+
+		case EProcess::EKirshFiltration:
+		{
+
+		} break;
+
+		case EProcess::ELinearClosure:
+		{
+
+		} break;
+
+		case EProcess::EConvexSurr:
+		{
+
+		} break;
+
+		default:
+		{
+
+		} break;
+	}
 }
 
 void PrintUsage()

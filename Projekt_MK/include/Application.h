@@ -12,8 +12,9 @@ enum class EProcess
 };
 
 /*	----------------------------------------------------------
-*	Function name:	ReadArgument
+*	Function name:	ReadArgument()
 *	Parameters:		int argc, char* InputArgument
+*					argc- parameters quantity; InputArgument - passed argument.
 *	Used to:		Check if input argument have *.bmp extension. Parse argument to String class.
 *	Return:			Parsed Input Argument as String instance.
 */
@@ -21,7 +22,7 @@ String^ ReadArgument(int argc, char* InputArgument);
 
 
 /*	----------------------------------------------------------
-*	Function name:	PickProcess
+*	Function name:	PickProcess()
 *	Parameters:		None
 *	Used to:		Interact with user to choose desired image proccess.
 *	Return:			Process id.
@@ -29,7 +30,24 @@ String^ ReadArgument(int argc, char* InputArgument);
 int PickProcess();
 
 /*	----------------------------------------------------------
-*	Function name:	PrintUsage
+*	Function name:	ReadImage()
+*	Parameters:		String^ FilePath
+*	Used to:		Construct Bitmap class, and check for if is valid.
+*	Return:			Constructed Bitmap class.
+*/
+Bitmap^ ReadImage(String^ FilePath);
+
+/*	----------------------------------------------------------
+*	Function name:	Start()
+*	Parameters:		Bitmap^ Image, int Pick
+*					Image - input image; Pick - number of picked process
+*	Used to:		Start processing.
+*	Return:			None.
+*/
+void Start(Bitmap^ Image, int Pick);
+
+/*	----------------------------------------------------------
+*	Function name:	PrintUsage()
 *	Parameters:		None.
 *	Used to:		Print to console information about program.
 *	Return:			None. 
@@ -42,7 +60,7 @@ void PrintUsage();
 /* -------------------  Auxiliary Functions -------------------  */
 
 /*	----------------------------------------------------------
-*	Function name:	PrintChoiceInfo
+*	Function name:	PrintChoiceInfo()
 *	Parameters:		None.
 *	Used to:		Print to console information Choice() function.
 *	Return:			None.
