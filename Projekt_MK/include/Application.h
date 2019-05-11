@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Headers.h"
+#include "AutoTresholding.h"
 
 enum class EProcess
 {

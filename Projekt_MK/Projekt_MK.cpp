@@ -14,6 +14,7 @@ int main( int argc, char* argv[])
 		if (Pick != 0)
 		{
 			Start( InputImage , Pick );
+			
 		}
 
 	}

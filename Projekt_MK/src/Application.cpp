@@ -1,6 +1,7 @@
 
 #include "../include/Application.h"
 
+/* -------------------  ReadArgument() Function -------------------  */
 String^ ReadArgument(int argc, char* InputArgument)
 {
 	if (argc != 2)
@@ -11,15 +12,16 @@ String^ ReadArgument(int argc, char* InputArgument)
 
 	String^ Temp = gcnew String(InputArgument);
 
-	if (!Temp->EndsWith(gcnew String(".bmp")))
-	{
-		PrintUsage();
-		throw "Invalid file extension. Need to be *.bmp";
-	}
+	//if (!Temp->EndsWith(gcnew String(".bmp")))
+	//{
+	//	PrintUsage();
+	//	throw "Invalid file extension. Need to be *.bmp";
+	//}
 
 	return Temp;
 }
 
+/* -------------------  PickProcess() Function -------------------  */
 int PickProcess()
 {
 	PrintChoiceInfo();
@@ -45,6 +47,7 @@ int PickProcess()
 	return Choice;
 }
 
+/* -------------------  ReadImage() Function -------------------  */
 Bitmap^ ReadImage(String ^ FilePath)
 {
 	Bitmap^ bmp;
@@ -56,14 +59,16 @@ Bitmap^ ReadImage(String ^ FilePath)
 	return bmp;
 }
 
-void Start(Bitmap^ Image, int Pick)
+/* -------------------  Start() Function -------------------  */
+void Start(Bitmap^ Img, int Pick)
 {
 	EProcess Process = static_cast<EProcess>(Pick);
 	switch (Process)
 	{
 		case EProcess::EAutoTreshold:
 		{
-
+			AutoTresholding^ TresholdingProcess = gcnew AutoTresholding( Img );
+			TresholdingProcess->Compute();
 		} break;
 
 		case EProcess::EKirshFiltration:
@@ -88,6 +93,7 @@ void Start(Bitmap^ Image, int Pick)
 	}
 }
 
+/* -------------------  PrintUsage() Function -------------------  */
 void PrintUsage()
 {
 	printf("\nImage Processing console application.");

@@ -2,13 +2,20 @@
 
 #include "Headers.h"
 
-class AutoTresholding
+public ref class AutoTresholding
 {
 	public:
-		AutoTresholding();
+		AutoTresholding( Bitmap^ Image );
 		~AutoTresholding();
 
-	private:
+		Bitmap^ Compute();
 
+	private:
+		Bitmap^ Img;
+		array<int, 256>* Histogram;
+
+		void ComputeHistogram();
+
+		void Rgb2Gray();
 };
 
