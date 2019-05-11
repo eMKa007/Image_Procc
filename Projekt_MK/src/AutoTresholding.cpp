@@ -12,6 +12,12 @@ AutoTresholding::~AutoTresholding()
 	delete Histogram;
 }
 
+/*	----------------------------------------------------------
+*	Function name:	Compute()
+*	Parameters:		None.
+*	Used to:		Start image processing. Prepare, and compute.
+*	Return:			Computed new Bitmap.
+*/
 Bitmap ^ AutoTresholding::Compute()
 {
 	switch (Img->PixelFormat)
@@ -33,6 +39,12 @@ Bitmap ^ AutoTresholding::Compute()
 	// TODO: insert return statement here
 }
 
+/*	----------------------------------------------------------
+*	Function name:	ComputeHistogram()
+*	Parameters:		None.
+*	Used to:		Compute Histogram of grayscale image, where pixel value is stored in Red value.
+*	Return:			None. Histogram array is filled.
+*/
 void AutoTresholding::ComputeHistogram()
 {
 	for (int kx = 0; kx < Img->Width; kx++)
@@ -44,6 +56,12 @@ void AutoTresholding::ComputeHistogram()
 	}
 }
 
+/*	----------------------------------------------------------
+*	Function name:	Rgb2Gray()
+*	Parameters:		None.
+*	Used to:		Compute each pixel grayscale value based on its RGB value, and save it as new pixel value.
+*	Return:			None. Bitmap is updated to Grayscale image.
+*/
 void AutoTresholding::Rgb2Gray()
 {
 	for (int kx = 0; kx < Img->Width; kx++)

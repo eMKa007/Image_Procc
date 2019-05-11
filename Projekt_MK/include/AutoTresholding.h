@@ -7,7 +7,7 @@ public ref class AutoTresholding
 	public:
 		AutoTresholding( Bitmap^ Image );
 		~AutoTresholding();
-
+		
 		Bitmap^ Compute();
 
 	private:
