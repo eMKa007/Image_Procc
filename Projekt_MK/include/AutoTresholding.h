@@ -14,8 +14,18 @@ public ref class AutoTresholding
 		Bitmap^ Img;
 		array<int, 256>* Histogram;
 
-		void ComputeHistogram();
-
 		void Rgb2Gray();
+
+		void ComputeHistogram();
+		
+		double ComputeHistogramEntropy(int StartIdx, int EndIdx);
+		
+		int ComputeMaxEntropy();
+		
+		/* -------------------  Auxiliary Functions -------------------  */
+		void TresholdEntropyValues(vector<double>* kValues);
+
+		int MaxValue(vector<double>* kValues);
+		
 };
 

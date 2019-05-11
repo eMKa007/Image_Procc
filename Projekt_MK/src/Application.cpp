@@ -1,7 +1,13 @@
 
 #include "../include/Application.h"
 
-/* -------------------  ReadArgument() Function -------------------  */
+/*	----------------------------------------------------------
+*	Function name:	ReadArgument()
+*	Parameters:		int argc, char* InputArgument
+*					argc- parameters quantity; InputArgument - passed argument.
+*	Used to:		Check if input argument have *.bmp extension. Parse argument to String class.
+*	Return:			Parsed Input Argument as String instance.
+*/
 String^ ReadArgument(int argc, char* InputArgument)
 {
 	if (argc != 2)
@@ -21,7 +27,12 @@ String^ ReadArgument(int argc, char* InputArgument)
 	return Temp;
 }
 
-/* -------------------  PickProcess() Function -------------------  */
+/*	----------------------------------------------------------
+*	Function name:	PickProcess()
+*	Parameters:		None
+*	Used to:		Interact with user to choose desired image proccess.
+*	Return:			Process id.
+*/
 int PickProcess()
 {
 	PrintChoiceInfo();
@@ -47,7 +58,12 @@ int PickProcess()
 	return Choice;
 }
 
-/* -------------------  ReadImage() Function -------------------  */
+/*	----------------------------------------------------------
+*	Function name:	ReadImage()
+*	Parameters:		String^ FilePath
+*	Used to:		Construct Bitmap class, and check for if is valid.
+*	Return:			Constructed Bitmap class.
+*/
 Bitmap^ ReadImage(String ^ FilePath)
 {
 	Bitmap^ bmp;
@@ -59,7 +75,13 @@ Bitmap^ ReadImage(String ^ FilePath)
 	return bmp;
 }
 
-/* -------------------  Start() Function -------------------  */
+/*	----------------------------------------------------------
+*	Function name:	Start()
+*	Parameters:		Bitmap^ Image, int Pick
+*					Image - input image; Pick - number of picked process
+*	Used to:		Start processing.
+*	Return:			None.
+*/
 void Start(Bitmap^ Img, int Pick)
 {
 	EProcess Process = static_cast<EProcess>(Pick);
@@ -93,7 +115,12 @@ void Start(Bitmap^ Img, int Pick)
 	}
 }
 
-/* -------------------  PrintUsage() Function -------------------  */
+/*	----------------------------------------------------------
+*	Function name:	PrintUsage()
+*	Parameters:		None.
+*	Used to:		Print to console information about program.
+*	Return:			None.
+*/
 void PrintUsage()
 {
 	printf("\nImage Processing console application.");
@@ -107,6 +134,12 @@ void PrintUsage()
 
 /* -------------------  Auxiliary Functions -------------------  */
 
+/*	----------------------------------------------------------
+*	Function name:	PrintChoiceInfo()
+*	Parameters:		None.
+*	Used to:		Print to console information Choice() function.
+*	Return:			None.
+*/
 void PrintChoiceInfo()
 {
 	printf("Choose desired process: <0-4>\n");
