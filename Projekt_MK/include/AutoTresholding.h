@@ -21,6 +21,8 @@ public ref class AutoTresholding
 		double ComputeHistogramEntropy(int StartIdx, int EndIdx);
 		
 		int ComputeMaxEntropy();
+
+		void Image2Binary(int TresholdValue);
 		
 		/* -------------------  Auxiliary Functions -------------------  */
 		void TresholdEntropyValues(vector<double>* kValues);

@@ -90,7 +90,7 @@ void Start(Bitmap^ Img, int Pick)
 		case EProcess::EAutoTreshold:
 		{
 			AutoTresholding^ TresholdingProcess = gcnew AutoTresholding( Img );
-			TresholdingProcess->Compute();
+			Bitmap^ ResultBitmap = TresholdingProcess->Compute();
 		} break;
 
 		case EProcess::EKirshFiltration:

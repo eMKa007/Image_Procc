@@ -30,6 +30,7 @@ Bitmap ^ AutoTresholding::Compute()
 
 			double ImgEntropy	= ComputeHistogramEntropy( 0, Histogram->size() );
 			int TresholdVal		= ComputeMaxEntropy();
+			//Image2Binary( TresholdVal );
 		
 		} break;
 
@@ -131,6 +132,28 @@ int AutoTresholding::ComputeMaxEntropy()
 	TresholdEntropyValues(kValues);
 
 	return MaxValue(kValues);;
+}
+
+/*	----------------------------------------------------------
+*	Function name:	Image2Binary()
+*	Parameters:		int TresholdValue - Level of brightness <1-255>
+*	Used to:		Binary input image with given treshold level.
+*	Return:			None. Input image is changed to binary one.
+*/
+void AutoTresholding::Image2Binary(int TresholdValue)
+{
+	for (int kx = 0; kx < Img->Width; kx++)
+	{
+		for (int ky = 0; ky < Img->Height; ky++)
+		{
+			Color Pixel = Img->GetPixel(kx, ky);
+			
+			if (Pixel.R > TresholdValue)
+				Img->SetPixel(kx, ky, Color::White);
+			else
+				Img->SetPixel(kx, ky, Color::Black);
+		}
+	}
 }
 
 /* -------------------  Auxiliary Functions -------------------  */
