@@ -20,26 +20,15 @@ AutoTresholding::~AutoTresholding()
 */
 Bitmap ^ AutoTresholding::Compute()
 {
-	switch (Img->PixelFormat)
-	{
-		case Imaging::PixelFormat::Format24bppRgb:
-		{
-			Rgb2Gray();
-			
-			ComputeHistogram();
+	if( Img->PixelFormat == Imaging::PixelFormat::Format24bppRgb )
+		Rgb2Gray();
 
-			double ImgEntropy	= ComputeHistogramEntropy( 0, Histogram->size() );
-			int TresholdVal		= ComputeMaxEntropy();
-			
-			Image2Binary( TresholdVal );
-		
-		} break;
+	ComputeHistogram();
 
-		case Imaging::PixelFormat::Format8bppIndexed:
-		{
-			ComputeHistogram();
-		} break;
-	}
+	double	ImgEntropy	= ComputeHistogramEntropy(0, Histogram->size());
+	int		TresholdVal = ComputeMaxEntropy();
+
+	Image2Binary(TresholdVal);
 
 	return Img;
 }

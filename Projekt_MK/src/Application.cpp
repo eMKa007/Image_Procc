@@ -150,7 +150,6 @@ String^ ChangeFileName(String^ FileName, String^ ExtensionReplacement)
 	return FileName->Insert(Length - 4, ExtensionReplacement);
 }
 
-
 /*	----------------------------------------------------------
 *	Function name:	PrintChoiceInfo()
 *	Parameters:		None.
