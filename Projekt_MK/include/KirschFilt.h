@@ -12,7 +12,7 @@ public ref class KirschFilt
 
 	private:
 		Bitmap^ Img;
-		array< array<int, 9>*, 8>* KirshMasks;
+		array< array<int, 9>*, 8>* KirschMasks;
 
 
 		/* -------------------  Auxiliary Functions -------------------  */

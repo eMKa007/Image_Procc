@@ -2,13 +2,13 @@
 
 KirschFilt::KirschFilt(Bitmap ^ Image): Img(Image) 
 {
-	KirshMasks = new array< array< int, 9>*, 8>;
-	KirshMasks->fill(0);
+	KirschMasks = new array< array< int, 9>*, 8>;
+	KirschMasks->fill(0);
 
 	for (int i = 0; i < 8; i++)
 	{
-		(*KirshMasks)[i] = new array< int, 9>;
-		(*KirshMasks)[i]->fill(0);
+		(*KirschMasks)[i] = new array< int, 9>;
+		(*KirschMasks)[i]->fill(0);
 	}
 
 	FillKirschMasks();
@@ -37,6 +37,12 @@ Bitmap ^ KirschFilt::Compute()
 
 /* -------------------  Auxiliary Functions -------------------  */
 
+/*	----------------------------------------------------------
+*	Function name:	FillKirschMasks()
+*	Parameters:		None.
+*	Used to:		Fill created array of Masks with values used by Kirsch Filter.
+*	Return:			None. KirschMasks are updates.
+*/
 void KirschFilt::FillKirschMasks()
 {
 	array<int, 9>* Mask = new array<int, 9>;
@@ -54,13 +60,19 @@ void KirschFilt::FillKirschMasks()
 	{
 		for (int x = 0; x < 9; x++)
 		{
-			KirshMasks->at(y)->at(x) = Mask->at(x);
+			KirschMasks->at(y)->at(x) = Mask->at(x);
 		}
+
 		RotateMask45(Mask);
 	}
 }
 
-
+/*	----------------------------------------------------------
+*	Function name:	RotateMask45()
+*	Parameters:		array<int, 9>* Mask - One of eight Kirsch mask. 
+*	Used to:		Rotate Kirsch mask by 45deg.
+*	Return:			None. Input Mask is updated.
+*/
 void KirschFilt::RotateMask45(array<int, 9>* Mask)
 {
 	int temp = Mask->at(1);
