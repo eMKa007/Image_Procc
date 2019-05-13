@@ -14,7 +14,15 @@ KirschFilt::KirschFilt(Bitmap ^ Image): Img(Image)
 	FillKirschMasks();
 }
 
-KirschFilt::~KirschFilt() { }
+KirschFilt::~KirschFilt() 
+{ 
+	for (int i = 0; i < 8; i++)
+	{
+		delete( (*KirschMasks)[i] );
+	}
+
+	delete KirschMasks;
+}
 
 /*	----------------------------------------------------------
 *	Function name:	Compute()
@@ -24,7 +32,18 @@ KirschFilt::~KirschFilt() { }
 */
 Bitmap ^ KirschFilt::Compute()
 {
-	
+	switch (Img->PixelFormat)
+	{
+		case Imaging::PixelFormat::Format24bppRgb:
+		{
+
+		} break;
+
+		case Imaging::PixelFormat::Format8bppIndexed:
+		{
+
+		} break;
+	}
 
 
 
