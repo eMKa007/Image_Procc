@@ -13,7 +13,7 @@ int main( int argc, char* argv[])
 		int Pick = PickProcess();
 		if (Pick != 0)
 		{
-			Start( InputImage , Pick );
+			Start( InputImage, FilePath, Pick );
 		}
 
 	}

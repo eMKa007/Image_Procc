@@ -82,7 +82,7 @@ Bitmap^ ReadImage(String ^ FilePath)
 *	Used to:		Start processing.
 *	Return:			None.
 */
-void Start(Bitmap^ Img, int Pick)
+void Start(Bitmap^ Img, String^ FilePath, int Pick)
 {
 	EProcess Process = static_cast<EProcess>(Pick);
 	switch (Process)
@@ -91,6 +91,7 @@ void Start(Bitmap^ Img, int Pick)
 		{
 			AutoTresholding^ TresholdingProcess = gcnew AutoTresholding( Img );
 			Bitmap^ ResultBitmap = TresholdingProcess->Compute();
+			ResultBitmap->Save( ChangeFileName(FilePath, "_AutoTreshold.bmp") );
 		} break;
 
 		case EProcess::EKirshFiltration:
@@ -133,6 +134,22 @@ void PrintUsage()
 
 
 /* -------------------  Auxiliary Functions -------------------  */
+
+/*	----------------------------------------------------------
+*	Function name:	ChangeFileName()
+*	Parameters:		String^ FileName - input filename, with file extension.
+					String^ ExtensionReplacement - string to replace old extension.
+*	Used to:		Replace file extension with given string.
+*	Return:			FileName updated.
+*/
+String^ ChangeFileName(String^ FileName, String^ ExtensionReplacement)
+{
+	int Length = FileName->ToCharArray()->Length;
+	FileName = FileName->Remove(Length - 4);
+
+	return FileName->Insert(Length - 4, ExtensionReplacement);
+}
+
 
 /*	----------------------------------------------------------
 *	Function name:	PrintChoiceInfo()

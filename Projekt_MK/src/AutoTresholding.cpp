@@ -30,7 +30,8 @@ Bitmap ^ AutoTresholding::Compute()
 
 			double ImgEntropy	= ComputeHistogramEntropy( 0, Histogram->size() );
 			int TresholdVal		= ComputeMaxEntropy();
-			//Image2Binary( TresholdVal );
+			
+			Image2Binary( TresholdVal );
 		
 		} break;
 
@@ -40,9 +41,7 @@ Bitmap ^ AutoTresholding::Compute()
 		} break;
 	}
 
-
-	throw "End of Implementation.";
-	// TODO: insert return statement here
+	return Img;
 }
 
 /*	----------------------------------------------------------

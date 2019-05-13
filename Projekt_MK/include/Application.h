@@ -14,15 +14,17 @@ enum class EProcess
 
 String^ ReadArgument(int argc, char* InputArgument);
 
-int PickProcess();
-
 Bitmap^ ReadImage(String^ FilePath);
 
-void Start(Bitmap^ Image, int Pick);
+int PickProcess();
+
+void Start(Bitmap^ Image, String^ FilePath, int Pick);
 
 void PrintUsage();
 
 
 /* -------------------  Auxiliary Functions -------------------  */
+
+String^ ChangeFileName(String^ FileName, String^ ExtensionReplacement);
 
 void PrintChoiceInfo();
