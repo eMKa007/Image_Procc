@@ -36,12 +36,14 @@ Bitmap ^ KirschFilt::Compute()
 	{
 		case Imaging::PixelFormat::Format24bppRgb:
 		{
-
+			ProcessChannel( ColorChannel::R );
+			ProcessChannel( ColorChannel::G );
+			ProcessChannel( ColorChannel::B );
 		} break;
 
 		case Imaging::PixelFormat::Format8bppIndexed:
 		{
-
+			ProcessChannel( ColorChannel::GrayScale );
 		} break;
 	}
 
@@ -51,7 +53,37 @@ Bitmap ^ KirschFilt::Compute()
 	return Img;
 }
 
+void KirschFilt::ProcessChannel(ColorChannel Channel)
+{
+	switch (Channel)
+	{
+		case ColorChannel::R:
+		{
 
+		} break;
+	
+		case ColorChannel::G:
+		{
+
+		}break;
+
+		case ColorChannel::B:
+		{
+	
+		} break;
+
+		case ColorChannel::GrayScale:
+		{
+
+		} break;
+
+		default:
+		{
+	
+		} break;
+	}
+
+}
 
 
 /* -------------------  Auxiliary Functions -------------------  */

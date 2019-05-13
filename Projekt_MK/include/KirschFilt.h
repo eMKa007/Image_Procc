@@ -2,6 +2,14 @@
 
 #include "Headers.h"
 
+enum class ColorChannel
+{
+	R,
+	G,
+	B,
+	GrayScale
+};
+
 public ref class KirschFilt
 {
 	public:
@@ -14,6 +22,8 @@ public ref class KirschFilt
 		Bitmap^ Img;
 		array< array<int, 9>*, 8>* KirschMasks;
 
+
+		void ProcessChannel(ColorChannel Channel);
 
 		/* -------------------  Auxiliary Functions -------------------  */
 		void FillKirschMasks();
