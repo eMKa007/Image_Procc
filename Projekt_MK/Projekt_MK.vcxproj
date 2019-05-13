@@ -156,6 +156,7 @@
     <ClCompile Include="Projekt_MK.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\AutoTresholding.cpp" />
+    <ClCompile Include="src\KirschFilt.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -165,6 +166,7 @@
     <ClInclude Include="include\Application.h" />
     <ClInclude Include="include\AutoTresholding.h" />
     <ClInclude Include="include\Headers.h" />
+    <ClInclude Include="include\KirschFilt.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

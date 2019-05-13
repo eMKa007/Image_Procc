@@ -24,6 +24,9 @@
     <ClCompile Include="src\AutoTresholding.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\KirschFilt.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Application.h">
@@ -33,6 +36,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Headers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\KirschFilt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

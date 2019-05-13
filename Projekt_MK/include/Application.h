@@ -2,6 +2,7 @@
 
 #include "Headers.h"
 #include "AutoTresholding.h"
+#include "KirschFilt.h"
 
 enum class EProcess
 {
