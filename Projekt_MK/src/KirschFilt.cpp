@@ -12,6 +12,9 @@ KirschFilt::KirschFilt(Bitmap ^ Image): Img(Image)
 	}
 
 	FillKirschMasks();
+
+	TempImage = gcnew Bitmap(Img->Width + 2, Img->Height + 2, Img->PixelFormat);
+	ReplicateBorderValues(TempImage, Image);
 }
 
 KirschFilt::~KirschFilt() 
@@ -53,6 +56,12 @@ Bitmap ^ KirschFilt::Compute()
 	return Img;
 }
 
+/*	----------------------------------------------------------
+*	Function name:	ProcessChannel()
+*	Parameters:		ColorChannel Channel - Selected color channel to process.
+*	Used to:		Applay Kirsch filtr to selected color channel.
+*	Return:			None. Selected channel is updated.
+*/
 void KirschFilt::ProcessChannel(ColorChannel Channel)
 {
 	switch (Channel)
@@ -148,4 +157,46 @@ void KirschFilt::RotateMask45(array<int, 9>* Mask)
 	Mask->at(3) = temp2;
 
 	Mask->at(0) = temp;
+}
+
+/*	----------------------------------------------------------
+*	Function name:	ReplicateBorderValues()
+*	Parameters:		System::Drawing::Bitmap^ TempImage - New image to replicate border.
+*					System::Drawing::Bitmap^ Image - Original image from border taken.
+*	Used to:		Replicate border from Image to TempImage
+*	Return:			None. TempImage is filled.
+*/
+void KirschFilt::ReplicateBorderValues(System::Drawing::Bitmap ^ TempImage, System::Drawing::Bitmap ^ Image)
+{
+	//Copy Left-Top corner.
+	TempImage->SetPixel(0, 0, Image->GetPixel(0, 0));
+
+	//Copy First line.
+	for (int i = 0; i < Image->Width; i++)
+		TempImage->SetPixel(i + 1, 0, Image->GetPixel(i, 0));
+
+	//Copy Upper Right Corner
+	TempImage->SetPixel(TempImage->Width - 1, 0, Image->GetPixel(Image->Width - 1, 0));
+
+	//Copy Both sides.
+	for (int i = 0; i < Image->Height; i++)
+	{
+		TempImage->SetPixel(0, i, Image->GetPixel(0, i));
+		TempImage->SetPixel(TempImage->Width - 1, i, Image->GetPixel(Image->Width - 1, i));
+	}
+
+	//Copy Bottom-left corner.
+	TempImage->SetPixel(0, TempImage->Height - 1, Image->GetPixel(0, Image->Height - 1));
+
+	//Copy last line.
+	for (int i = 0; i < Image->Width; i++)
+		TempImage->SetPixel(i + 1, TempImage->Height - 1, Image->GetPixel(i, Image->Height - 1));
+
+	//Copy Bottom-right corner.
+	TempImage->SetPixel(TempImage->Width - 1, TempImage->Height - 1, Image->GetPixel(Image->Width - 1, Image->Height - 1));
+
+	//Copy Rest of Image (inner part)
+	for (int x = 0; x < Image->Width; x++)
+		for (int y = 0; y < Image->Height; y++)
+			TempImage->SetPixel(x + 1, y + 1, Image->GetPixel(x, y));
 }

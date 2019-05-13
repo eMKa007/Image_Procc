@@ -97,7 +97,7 @@ void Start(Bitmap^ Img, String^ FilePath, int Pick)
 		case EProcess::EKirshFiltration:
 		{
 			KirschFilt^ KirshFiltration = gcnew KirschFilt( Img );
-
+			KirshFiltration->Compute();
 
 		} break;
 
