@@ -1,6 +1,16 @@
 #include "../include/KirschFilt.h"
 
-KirschFilt::KirschFilt(Bitmap ^ Image): Img(Image) { }
+KirschFilt::KirschFilt(Bitmap ^ Image): Img(Image) 
+{
+	KirshMasks = new array< array< int, 9>*, 8>;
+	KirshMasks->fill(0);
+
+	for (int i = 0; i < 8; i++)
+	{
+		(*KirshMasks)[i] = new array< int, 9>;
+		(*KirshMasks)[i]->fill(0);
+	}
+}
 
 KirschFilt::~KirschFilt() { }
 

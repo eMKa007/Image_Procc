@@ -4,13 +4,14 @@
 
 public ref class KirschFilt
 {
-public:
-	KirschFilt(Bitmap^ Image);
-	~KirschFilt();
+	public:
+		KirschFilt(Bitmap^ Image);
+		~KirschFilt();
 
-	Bitmap^ Compute();
+		Bitmap^ Compute();
 
-private:
-	Bitmap^ Img;
+	private:
+		Bitmap^ Img;
+		array< array<int, 9>*, 8>* KirshMasks;
 
 };
