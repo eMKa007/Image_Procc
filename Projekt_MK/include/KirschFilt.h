@@ -14,4 +14,9 @@ public ref class KirschFilt
 		Bitmap^ Img;
 		array< array<int, 9>*, 8>* KirshMasks;
 
+
+		/* -------------------  Auxiliary Functions -------------------  */
+		void FillKirschMasks();
+
+		void RotateMask45(array<int, 9>* Mask);
 };
