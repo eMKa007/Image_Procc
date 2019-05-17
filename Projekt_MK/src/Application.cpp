@@ -84,21 +84,23 @@ Bitmap^ ReadImage(String ^ FilePath)
 */
 void Start(Bitmap^ Img, String^ FilePath, int Pick)
 {
+	Bitmap^ ResultBitmap = nullptr;
+
 	EProcess Process = static_cast<EProcess>(Pick);
 	switch (Process)
 	{
 		case EProcess::EAutoTreshold:
 		{
 			AutoTresholding^ TresholdingProcess = gcnew AutoTresholding( Img );
-			Bitmap^ ResultBitmap = TresholdingProcess->Compute();
+			ResultBitmap = TresholdingProcess->Compute();
 			ResultBitmap->Save( ChangeFileName(FilePath, "_AutoTreshold.bmp") );
 		} break;
 
 		case EProcess::EKirshFiltration:
 		{
 			KirschFilt^ KirshFiltration = gcnew KirschFilt( Img );
-			KirshFiltration->Compute();
-
+			ResultBitmap = KirshFiltration->Compute();
+			ResultBitmap->Save(ChangeFileName(FilePath, "_KirschFiltration.bmp"));
 		} break;
 
 		case EProcess::ELinearClosure:
