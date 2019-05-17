@@ -13,6 +13,14 @@ KirschFilt::KirschFilt(Bitmap^ InputImage)
 
 	FillKirschMasks();
 
+	// If Input image is different from 24bits depth- clone it to 24bits depth.
+	if (InputImage->PixelFormat != Imaging::PixelFormat::Format24bppRgb)
+	{
+		Rectangle BBox = Rectangle(0, 0, InputImage->Width, InputImage->Height);
+		Bitmap^ clonedOne = InputImage->Clone(BBox, Imaging::PixelFormat::Format24bppRgb);
+		InputImage = clonedOne;
+	}
+
 	// Create new bitmap, Replicate border, and fill like input image.
 	Img = gcnew Bitmap(InputImage->Width + 2, InputImage->Height + 2, InputImage->PixelFormat);
 	ReplicateBorderValues(Img, InputImage);
@@ -65,106 +73,26 @@ Bitmap^ KirschFilt::Compute()
 */
 void KirschFilt::FillKirschMasks()
 {
-	//array<int, 9>* Mask = new array<int, 9>;
-	//Mask->at(0) = 5;
-	//Mask->at(1) = 5;
-	//Mask->at(2) = 5;
-	//Mask->at(3) = -3;
-	//Mask->at(4) = 0;
-	//Mask->at(5) = -3;
-	//Mask->at(6) = -3;
-	//Mask->at(7) = -3;
-	//Mask->at(8) = -3;
+	array<int, 9>* Mask = new array<int, 9>;
+	Mask->at(0) = 5;
+	Mask->at(1) = 5;
+	Mask->at(2) = 5;
+	Mask->at(3) = -3;
+	Mask->at(4) = 0;
+	Mask->at(5) = -3;
+	Mask->at(6) = -3;
+	Mask->at(7) = -3;
+	Mask->at(8) = -3;
 
-	KirschMasks->at(0)->at(0) = 5;
-	KirschMasks->at(0)->at(1) = 5;
-	KirschMasks->at(0)->at(2) = 5;
-	KirschMasks->at(0)->at(3) = -3;
-	KirschMasks->at(0)->at(4) = 0;
-	KirschMasks->at(0)->at(5) = -3;
-	KirschMasks->at(0)->at(6) = -3;
-	KirschMasks->at(0)->at(7) = -3;
-	KirschMasks->at(0)->at(8) = -3;
+	for (int y = 0; y < 8; y++)
+	{
+		for (int x = 0; x < 9; x++)
+		{
+			KirschMasks->at(y)->at(x) = Mask->at(x);
+		}
 
-	KirschMasks->at(1)->at(0) = 5;
-	KirschMasks->at(1)->at(1) = 5;
-	KirschMasks->at(1)->at(2) = -3;
-	KirschMasks->at(1)->at(3) = 5;
-	KirschMasks->at(1)->at(4) = 0;
-	KirschMasks->at(1)->at(5) = -3;
-	KirschMasks->at(1)->at(6) = -3;
-	KirschMasks->at(1)->at(7) = -3;
-	KirschMasks->at(1)->at(8) = -3;
-
-	KirschMasks->at(2)->at(0) = 5;
-	KirschMasks->at(2)->at(1) = -3;
-	KirschMasks->at(2)->at(2) = -3;
-	KirschMasks->at(2)->at(3) = 5;
-	KirschMasks->at(2)->at(4) = 0;
-	KirschMasks->at(2)->at(5) = -3;
-	KirschMasks->at(2)->at(6) = 5;
-	KirschMasks->at(2)->at(7) = -3;
-	KirschMasks->at(2)->at(8) = -3;
-
-	KirschMasks->at(3)->at(0) = -3;
-	KirschMasks->at(3)->at(1) = -3;
-	KirschMasks->at(3)->at(2) = -3;
-	KirschMasks->at(3)->at(3) = 5;
-	KirschMasks->at(3)->at(4) = 0;
-	KirschMasks->at(3)->at(5) = -3;
-	KirschMasks->at(3)->at(6) = 5;
-	KirschMasks->at(3)->at(7) = 5;
-	KirschMasks->at(3)->at(8) = -3;
-
-	KirschMasks->at(4)->at(0) = -3;
-	KirschMasks->at(4)->at(1) = -3;
-	KirschMasks->at(4)->at(2) = -3;
-	KirschMasks->at(4)->at(3) = -3;
-	KirschMasks->at(4)->at(4) = 0;
-	KirschMasks->at(4)->at(5) = -3;
-	KirschMasks->at(4)->at(6) = 5;
-	KirschMasks->at(4)->at(7) = 5;
-	KirschMasks->at(4)->at(8) = 5;
-
-	KirschMasks->at(5)->at(0) = -3;
-	KirschMasks->at(5)->at(1) = -3;
-	KirschMasks->at(5)->at(2) = -3;
-	KirschMasks->at(5)->at(3) = -3;
-	KirschMasks->at(5)->at(4) = 0;
-	KirschMasks->at(5)->at(5) = 5;
-	KirschMasks->at(5)->at(6) = -3;
-	KirschMasks->at(5)->at(7) = 5;
-	KirschMasks->at(5)->at(8) = 5;
-
-	KirschMasks->at(6)->at(0) = -3;
-	KirschMasks->at(6)->at(1) = -3;
-	KirschMasks->at(6)->at(2) = 5;
-	KirschMasks->at(6)->at(3) = -3;
-	KirschMasks->at(6)->at(4) = 0;
-	KirschMasks->at(6)->at(5) = 5;
-	KirschMasks->at(6)->at(6) = -3;
-	KirschMasks->at(6)->at(7) = -3;
-	KirschMasks->at(6)->at(8) = 5;
-
-	KirschMasks->at(7)->at(0) = -3;
-	KirschMasks->at(7)->at(1) = 5;
-	KirschMasks->at(7)->at(2) = 5;
-	KirschMasks->at(7)->at(3) = -3;
-	KirschMasks->at(7)->at(4) = 0;
-	KirschMasks->at(7)->at(5) = 5;
-	KirschMasks->at(7)->at(6) = -3;
-	KirschMasks->at(7)->at(7) = -3;
-	KirschMasks->at(7)->at(8) = -3;
-
-	//for (int y = 0; y < 8; y++)
-	//{
-	//	for (int x = 0; x < 9; x++)
-	//	{
-	//		KirschMasks->at(y)->at(x) = Mask->at(x);
-	//	}
-
-	//	RotateMask45(Mask);
-	//}
+		RotateMask45(Mask);
+	}
 }
 
 /*	----------------------------------------------------------
@@ -242,7 +170,7 @@ void KirschFilt::ReplicateBorderValues(System::Drawing::Bitmap ^ TempImage, Syst
 }
 
 /*	----------------------------------------------------------
-*	Function name:	FiltChannels()
+*	Function name:	FiltChannelsRGB()
 *	Parameters:		None.
 *	Used to:		Apply Kirsch filter to image channels.
 *	Return:			None. Output Image is updated. 
@@ -314,7 +242,8 @@ void KirschFilt::FiltChannelsRGB()
 			}
 			
 			// Pick Maximum One from each one channel.
-			OutputImage->SetPixel(x-1, y-1, Color::FromArgb( MaxRValue > 255 ? 255 : MaxRValue,
+			OutputImage->SetPixel(x-1, y-1, Color::FromArgb( 
+				MaxRValue > 255 ? 255 : MaxRValue,
 				MaxGValue > 255 ? 255 : MaxGValue,
 				MaxBValue > 255 ? 255 : MaxBValue) );
 		}
