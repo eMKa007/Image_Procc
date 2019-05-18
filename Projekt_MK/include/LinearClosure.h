@@ -13,7 +13,17 @@ public ref class LinearClosure
 	private:
 		Bitmap^ Img;
 		Bitmap^ OutputImage;
-		array<int, 9>* StructuralElement;
+		vector<int>* StructuralElement;
 
+		/* -------------------  Auxiliary Functions -------------------  */
+		void CreateStructuralElement(int length, int degree);
+
+		int GetLength();
+
+		int GetDegree();
+
+		void Dilatation();
+
+		void Erosion();
 
 };
