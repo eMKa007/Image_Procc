@@ -20,8 +20,16 @@ AutoTresholding::~AutoTresholding()
 */
 Bitmap ^ AutoTresholding::Compute()
 {
-	if( Img->PixelFormat == Imaging::PixelFormat::Format24bppRgb )
+	if (Img->PixelFormat == Imaging::PixelFormat::Format24bppRgb)
+	{
 		Rgb2Gray();
+	}
+	else		// Change Grayscale to 3 same channel.
+	{
+		Rectangle BBox = Rectangle(0, 0, Img->Width, Img->Height);
+		Bitmap^ clonedOne = Img->Clone(BBox, Imaging::PixelFormat::Format24bppRgb);
+		Img = clonedOne;
+	}
 
 	ComputeHistogram();
 
@@ -45,7 +53,6 @@ void AutoTresholding::ComputeHistogram()
 	{
 		for (int ky = 0; ky < Img->Height; ky++)
 		{
-			/// TODO: What if image is 8bit grayscale? Is there R channel?
 			(*Histogram)[Img->GetPixel(kx, ky).R]++;
 		}
 	}
@@ -67,10 +74,8 @@ void AutoTresholding::Rgb2Gray()
 			int grayScale	= (int)round((OldColor.R * 0.3) + (OldColor.G * 0.59) + (OldColor.B * 0.11));			
 
 			// Grayscale image stored in 24bits bitmap instead of 8bit. Memory overhead. 
-			Img->SetPixel(kx, ky, Color::FromArgb(grayScale, grayScale, grayScale)); 
+			Img->SetPixel(kx, ky, Color::FromArgb(grayScale, grayScale, grayScale));
 
-			/// TODO: Create Clone of input Bitmap stored only 8bit values. 
-			//Bitmap^ NewOne = gcnew Bitmap(Img->Width, Img->Height, Imaging::PixelFormat::Format8bppIndexed);
 		}
 	}
 }
@@ -85,20 +90,17 @@ void AutoTresholding::Rgb2Gray()
 double AutoTresholding::ComputeHistogramEntropy(int StartIdx, int EndIdx)
 {
 	double ImgEntropy = 0.f;
-	//for (int kx = 0; kx < Img->Width; kx++)
-	//{
-	//	for (int ky = 0; ky < Img->Height; ky++)
-	//	{
-	//		int PixelVal = Img->GetPixel(kx, ky).R;
-	//		ImgEntropy += (PixelVal * Math::Log(PixelVal, Math::E));
-	//	}
-	//}
 
 	int TotalPx = Img->Width * Img->Height;
+
 	for (int i = StartIdx; i < EndIdx; i++)
 	{
 		double HistogramTempVal = (*Histogram)[i];
-		ImgEntropy += (HistogramTempVal / TotalPx) * Math::Log((HistogramTempVal / TotalPx), 2.0);
+
+		if (HistogramTempVal == 0)
+			continue;
+
+		ImgEntropy += (HistogramTempVal / TotalPx) * Math::Log((HistogramTempVal / TotalPx), Math::E);
 	}
 
 	ImgEntropy = -ImgEntropy;
@@ -137,9 +139,9 @@ void AutoTresholding::Image2Binary(int TresholdValue)
 			Color Pixel = Img->GetPixel(kx, ky);
 			
 			if (Pixel.R > TresholdValue)
-				Img->SetPixel(kx, ky, Color::White);
+				Img->SetPixel(kx, ky, Color::FromArgb(255, 255, 255));
 			else
-				Img->SetPixel(kx, ky, Color::Black);
+				Img->SetPixel(kx, ky, Color::FromArgb(0, 0, 0));
 		}
 	}
 }
@@ -169,10 +171,10 @@ void AutoTresholding::TresholdEntropyValues(vector<double>* kValues)
 
 		// ---------------------------------------------------------------------------------
 
-		double EntropyBg = ComputeHistogramEntropy(0, i);
-		double EntropyFg= ComputeHistogramEntropy(i + 1, HistogramSize);					/// TODO: Write proper formula for calculation!!!!
+		double EntropyI = ComputeHistogramEntropy(0, i);
+		//double EntropyFg = ComputeHistogramEntropy(i + 1, HistogramSize);
 
-		(*kValues)[i] = (1.f / BackgroundPx) * EntropyBg + (1.f / ForegroundPx) * EntropyFg;
+		(*kValues)[i] = (1.f / BackgroundPx) * EntropyI + (1.f / ForegroundPx) * EntropyI;
 
 		// ---------------------------------------------------------------------------------
 	}
@@ -188,6 +190,7 @@ int AutoTresholding::MaxValue(vector<double>* kValues)
 {
 	double MaxEntropy = 0;
 	int ResultVal = 0;
+
 	for (unsigned int i = 0; i < kValues->size(); i++)
 	{
 		if ((*kValues)[i] > MaxEntropy)
