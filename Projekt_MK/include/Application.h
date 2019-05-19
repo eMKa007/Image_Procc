@@ -3,6 +3,7 @@
 #include "Headers.h"
 #include "AutoTresholding.h"
 #include "KirschFilt.h"
+#include "LinearClosure.h"
 
 enum class EProcess
 {

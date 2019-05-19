@@ -105,6 +105,8 @@ void Start(Bitmap^ Img, String^ FilePath, int Pick)
 
 		case EProcess::ELinearClosure:
 		{
+			LinearClosure^ LinearClose = gcnew LinearClosure(Img);
+			ResultBitmap = LinearClose->Compute();
 
 		} break;
 
