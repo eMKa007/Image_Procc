@@ -22,8 +22,8 @@ public ref class LinearClosure
 
 		int GetDegree();
 
-		void Dilatation();
+		void Dilatation(Bitmap^ SourceImage);
 
-		void Erosion();
+		void Erosion(Bitmap^ SourceImage);
 
 };

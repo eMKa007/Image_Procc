@@ -22,10 +22,16 @@ LinearClosure::~LinearClosure()
 	delete StructuralElement;
 }
 
+/*	----------------------------------------------------------
+*	Function name:	Compute()
+*	Parameters:		None.
+*	Used to:		Start processing.
+*	Return:			Bitmap^ Image* - output computed image
+*/
 Bitmap^ LinearClosure::Compute()
 {
-	//Apply Dylatancja();
-	//Apply Erosion();
+	//Apply Dylatancja(Img);
+	//Apply Erosion(OutputImage);
 
 
 	return OutputImage;
@@ -33,6 +39,13 @@ Bitmap^ LinearClosure::Compute()
 
 /* -------------------  Auxiliary Functions -------------------  */
 
+/*	----------------------------------------------------------
+*	Function name:	CreateStructuralElement()
+*	Parameters:		int length - length of linear element
+					int degree - degree of element to OX axis.
+*	Used to:		Create Morphological structural element used in Erosion/Dilatation
+*	Return:			None. Structural element vector is filled.
+*/
 void LinearClosure::CreateStructuralElement( int length, int degree)
 {
 	StructuralElement = new vector<int>;
@@ -73,6 +86,12 @@ void LinearClosure::CreateStructuralElement( int length, int degree)
 
 }
 
+/*	----------------------------------------------------------
+*	Function name:	GetLength()
+*	Parameters:		None
+*	Used to:		Interact with user to choose desired element length.
+*	Return:			Element length.
+*/
 int LinearClosure::GetLength() 
 {
 	int			Choice = 0;
@@ -97,6 +116,12 @@ int LinearClosure::GetLength()
 	return Choice;
 }
 
+/*	----------------------------------------------------------
+*	Function name:	GetDegree()
+*	Parameters:		None
+*	Used to:		Interact with user to choose desired element rotation.
+*	Return:			Rotation degree to OX axis.
+*/
 int LinearClosure::GetDegree()
 {
 	int			Choice = 0;
@@ -121,12 +146,24 @@ int LinearClosure::GetDegree()
 	return Choice;
 }
 
-void LinearClosure::Dilatation()
+/*	----------------------------------------------------------
+*	Function name:	Dilatation()
+*	Parameters:		Bitmap^ SourceImage - desired image to apply dilatation to.
+*	Used to:		Apply Dilatation with linear element to input image.
+*	Return:			None. Output Image is updated.
+*/
+void LinearClosure::Dilatation( Bitmap^ SourceImage )
 {
 
 }
 
-void LinearClosure::Erosion()
+/*	----------------------------------------------------------
+*	Function name:	Erosion()
+*	Parameters:		Bitmap^ SourceImage - desired image to apply erosion to.
+*	Used to:		Apply Erosion with linear element to input image.
+*	Return:			None. Output Image is updated.
+*/
+void LinearClosure::Erosion( Bitmap^ SourceImage )
 {
 
 }
