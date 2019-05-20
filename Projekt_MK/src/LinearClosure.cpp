@@ -11,6 +11,7 @@ LinearClosure::LinearClosure(Bitmap ^ InputImage)
 	}
 
 	Img = InputImage;
+	OutputImage = gcnew Bitmap( Img->Width, Img->Height, Imaging::PixelFormat::Format24bppRgb);
 
 	CreateStructuralElement( GetLength(), GetDegree() );
 	
@@ -30,11 +31,7 @@ LinearClosure::~LinearClosure()
 */
 Bitmap^ LinearClosure::Compute()
 {
-	//Apply Dylatancja(Img);
-	//Apply Erosion(OutputImage);
-
-
-	return OutputImage;
+	return Erosion(Dilatation( Img ));
 }
 
 /* -------------------  Auxiliary Functions -------------------  */
@@ -48,20 +45,28 @@ Bitmap^ LinearClosure::Compute()
 */
 void LinearClosure::CreateStructuralElement( int length, int degree)
 {
+	/* Create container for structural element */
 	StructuralElement = new vector<int>;
 
-	int Height = Math::Abs(Math::Ceiling(Math::Sin( Math::PI * degree / 180.0 ) * length));
-	int Width = Math::Abs( Math::Ceiling(Math::Cos( Math::PI * degree / 180.0 ) * length));
+	/* Calculate size of structural element matrix */
+	structural_element_height = Math::Abs(Math::Ceiling(Math::Sin( Math::PI * degree / 180.0 ) * length));
+	structural_element_width = Math::Abs( Math::Ceiling(Math::Cos( Math::PI * degree / 180.0 ) * length));
 
-	StructuralElement->resize( Width * Height );
+	/* Resize container to calculated size, and fill with zeros */
+	StructuralElement->resize( structural_element_width * structural_element_height );
 	std::fill(StructuralElement->begin(), StructuralElement->end(), 0);
 
-	// Line equation -> y = ax + b; 
-	double Coef_a = Math::Round(Math::Tan(Math::PI * degree / 180.0) * 10) / 10;
-	double Coef_b = Coef_a < 0 ? 0 : -(Height - 1);
+	/* Compute centre of structural element */
+	structural_element_anchor_x = + Math::Floor( structural_element_width /2.f );
+	structural_element_anchor_y = Math::Floor( structural_element_height/2.f );
 
-	// Fill Structural Element Matrix with 0.05 step. 
-	for (double idx = 0; idx < Width; idx += 0.1)
+	/* Line equation -> y = ax + b; */
+	/* Calculate line factors */
+	double Coef_a = Math::Round(Math::Tan(Math::PI * degree / 180.0) * 10) / 10;
+	double Coef_b = Coef_a < 0 ? 0 : -(structural_element_height - 1);
+
+	/* Put 1 into structural element matrix where line is inside pixel */
+	for (double idx = 0; idx < structural_element_width; idx += 0.1)
 	{
 		idx = Math::Round(idx * 10) / 10;
 		float x = Math::Floor(idx);
@@ -71,19 +76,21 @@ void LinearClosure::CreateStructuralElement( int length, int degree)
 
 		double y = Math::Ceiling( Math::Abs( Coef_a * idx + Coef_b ));
 
-		int offset = (y * Width + x);
+		/* Calculate offset in 1d vector */
+		int offset = (y * structural_element_width + x);
 
 		StructuralElement->at( offset ) = 1;
 	}
 
+	/* Print to console computed structural element */
 	for (int i = 0; i < StructuralElement->size(); i++)
 	{
 		printf("  %d  ", StructuralElement->at(i));
-		if ( i % Width == Width-1)
+		if (i % structural_element_width == structural_element_width - 1)
 			printf("\n");
 	}
 
-
+	printf(" \n Anchor at: %d  %d", structural_element_anchor_x, structural_element_anchor_y);
 }
 
 /*	----------------------------------------------------------
@@ -104,7 +111,7 @@ int LinearClosure::GetLength()
 
 		cin >> Choice;		
 
-		if (Choice >= 0 && Choice <= Img->Height && Choice <= Img->Width)
+		if (Choice >= 0 && Choice <= (Img->Height < Img->Width ? Img->Height : Img->Width) )
 		{
 			Picked = true;
 			break;
@@ -152,9 +159,41 @@ int LinearClosure::GetDegree()
 *	Used to:		Apply Dilatation with linear element to input image.
 *	Return:			None. Output Image is updated.
 */
-void LinearClosure::Dilatation( Bitmap^ SourceImage )
+Bitmap^ LinearClosure::Dilatation( Bitmap^ SourceImage )
 {
+	for( int x = 0; x < Img->Width-1; x++)
+		for( int y = 0; y < Img->Height-1; y++)
+		{
+			int actual_min_value = 255;
 
+			/* For every pixel inside structural element compute value */
+			for( int idx = 0; idx < StructuralElement->size(); idx++)
+			{
+				/* Ignore pixels with values 0. They are not used. */
+				if( !StructuralElement->at( idx ) )
+					continue;
+
+				/* Actual structural idx element coordinates */
+				int se_x = Math::Floor(idx / structural_element_width);
+				int se_y = idx - se_x;
+
+				/* Compute pixel coordinates on input image */
+				int image_x =  x + se_x - structural_element_anchor_x;
+				int image_y = y + se_y - structural_element_anchor_y;
+
+				/* Prevent of accessing pixel out of input image */
+				if( image_x < 0 || image_y < 0 || image_x >= Img->Width || image_y >= Img->Height )
+					continue;
+
+				/* Update minimum value */
+				actual_min_value = actual_min_value > Img->GetPixel(image_x, image_y).R ? Img->GetPixel(image_x, image_y).R : actual_min_value;
+			}
+
+			OutputImage->SetPixel(x, y, Color::FromArgb(actual_min_value, actual_min_value , actual_min_value) );
+		}
+
+
+	return OutputImage;
 }
 
 /*	----------------------------------------------------------
@@ -163,7 +202,39 @@ void LinearClosure::Dilatation( Bitmap^ SourceImage )
 *	Used to:		Apply Erosion with linear element to input image.
 *	Return:			None. Output Image is updated.
 */
-void LinearClosure::Erosion( Bitmap^ SourceImage )
+Bitmap^ LinearClosure::Erosion( Bitmap^ SourceImage )
 {
+	for( int x = 0; x < Img->Width-1; x++)
+		for( int y = 0; y < Img->Height-1; y++)
+		{
+			int actual_max_value = 0;
 
+			/* For every pixel inside structural element compute value */
+			for( int idx = 0; idx < StructuralElement->size(); idx++)
+			{
+				/* Ignore pixels with values 0. They are not used. */
+				if( !StructuralElement->at( idx ) )
+					continue;
+
+				/* Actual structural idx element coordinates */
+				int se_x = Math::Floor(idx / structural_element_width);
+				int se_y = idx - se_x;
+
+				/* Compute pixel coordinates on input image */
+				int image_x =  x + se_x - structural_element_anchor_x;
+				int image_y = y + se_y - structural_element_anchor_y;
+
+				/* Prevent of accessing pixel out of input image */
+				if( image_x < 0 || image_y < 0 || image_x >= Img->Width || image_y >= Img->Height )
+					continue;
+
+				/* Update minimum value */
+				actual_max_value = actual_max_value < Img->GetPixel(image_x, image_y).R ? Img->GetPixel(image_x, image_y).R : actual_max_value;
+			}
+
+			OutputImage->SetPixel(x, y, Color::FromArgb(actual_max_value, actual_max_value , actual_max_value) );
+		}
+
+
+	return OutputImage;
 }

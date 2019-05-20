@@ -18,19 +18,13 @@ String^ ReadArgument(int argc, char* InputArgument)
 
 	String^ Temp = gcnew String(InputArgument);
 
-	//if (!Temp->EndsWith(gcnew String(".bmp")))
-	//{
-	//	PrintUsage();
-	//	throw "Invalid file extension. Need to be *.bmp";
-	//}
-
 	return Temp;
 }
 
 /*	----------------------------------------------------------
 *	Function name:	PickProcess()
 *	Parameters:		None
-*	Used to:		Interact with user to choose desired image proccess.
+*	Used to:		Interact with user to choose desired image process.
 *	Return:			Process id.
 */
 int PickProcess()
@@ -42,9 +36,9 @@ int PickProcess()
 
 	while (!Picked)
 	{
-		printf("\nEnter valid desired proccess number: ");
+		printf("\nEnter valid desired process number: ");
 		
-		cin >> Choice;		///TODO: Prompt user if input is not a number (eg. letter)
+		cin >> Choice;		/// TODO: Prompt user if input is not a number (eg. letter)
 				
 		if (Choice >= 0 && Choice <= 4)
 		{
@@ -66,8 +60,7 @@ int PickProcess()
 */
 Bitmap^ ReadImage(String ^ FilePath)
 {
-	Bitmap^ bmp;
-	bmp = gcnew Bitmap(FilePath, true);
+	Bitmap^ bmp = gcnew Bitmap(FilePath, true);
 
 	if (!bmp || bmp->Height == 0 || bmp->Width == 0)
 		throw "Invalid input image. Select valid one please.";
@@ -107,10 +100,10 @@ void Start(Bitmap^ Img, String^ FilePath, int Pick)
 		{
 			LinearClosure^ LinearClose = gcnew LinearClosure(Img);
 			ResultBitmap = LinearClose->Compute();
-
+			ResultBitmap->Save(ChangeFileName(FilePath, "_Closure.bmp"));
 		} break;
 
-		case EProcess::EConvexSurr:
+		case EProcess::EConvexSurrounding:
 		{
 
 		} break;

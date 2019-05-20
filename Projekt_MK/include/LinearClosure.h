@@ -15,6 +15,11 @@ public ref class LinearClosure
 		Bitmap^ OutputImage;
 		vector<int>* StructuralElement;
 
+		int structural_element_anchor_x;
+		int structural_element_anchor_y;
+		int structural_element_width;
+		int structural_element_height;
+
 		/* -------------------  Auxiliary Functions -------------------  */
 		void CreateStructuralElement(int length, int degree);
 
@@ -22,8 +27,8 @@ public ref class LinearClosure
 
 		int GetDegree();
 
-		void Dilatation(Bitmap^ SourceImage);
+		Bitmap^ Dilatation(Bitmap^ source_image);
 
-		void Erosion(Bitmap^ SourceImage);
+		Bitmap^ Erosion(Bitmap^ source_image);
 
 };

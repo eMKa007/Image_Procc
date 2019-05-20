@@ -7,11 +7,11 @@
 
 enum class EProcess
 {
-	None,
+	ENone,
 	EAutoTreshold,
 	EKirshFiltration,
 	ELinearClosure,
-	EConvexSurr
+	EConvexSurrounding
 };
 
 String^ ReadArgument(int argc, char* InputArgument);
