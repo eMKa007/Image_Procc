@@ -4,6 +4,7 @@
 #include "AutoTresholding.h"
 #include "KirschFilt.h"
 #include "CloseOpenLinear.h"
+#include "ConvexHull.h"
 
 enum class EProcess
 {

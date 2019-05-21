@@ -105,7 +105,9 @@ void Start(Bitmap^ Img, String^ FilePath, int Pick)
 
 		case EProcess::EConvexSurrounding:
 		{
-
+			ConvexHull^ Convex = gcnew ConvexHull(Img);
+			ResultBitmap = Convex->Compute();
+			ResultBitmap->Save(ChangeFileName(FilePath, "_Convex.bmp"));
 		} break;
 
 		default:

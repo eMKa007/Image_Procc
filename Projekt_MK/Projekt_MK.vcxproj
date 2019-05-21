@@ -153,6 +153,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="include\ConvexHull.cpp" />
     <ClCompile Include="Projekt_MK.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\AutoTresholding.cpp" />
@@ -166,6 +167,7 @@
   <ItemGroup>
     <ClInclude Include="include\Application.h" />
     <ClInclude Include="include\AutoTresholding.h" />
+    <ClInclude Include="include\ConvexHull.h" />
     <ClInclude Include="include\Headers.h" />
     <ClInclude Include="include\KirschFilt.h" />
     <ClInclude Include="include\CloseOpenLinear.h" />
