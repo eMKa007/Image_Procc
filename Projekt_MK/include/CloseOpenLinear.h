@@ -2,13 +2,14 @@
 
 #include "Headers.h"
 
-public ref class LinearClosure
+public ref class CloseOpenLinear
 {
 	public:
-		LinearClosure(Bitmap^ Image);
-		~LinearClosure();
+		CloseOpenLinear(Bitmap^ Image);
+		~CloseOpenLinear();
 
-		Bitmap^ Compute();
+		Bitmap^ imclose();
+		Bitmap^ imopen();
 
 	private:
 		Bitmap^ Img;
@@ -27,8 +28,8 @@ public ref class LinearClosure
 
 		int GetDegree();
 
-		Bitmap^ Dilatation(Bitmap^ source_image);
+		Bitmap^ Dilate(Bitmap^ source_image);
 
-		Bitmap^ Erosion(Bitmap^ source_image);
+		Bitmap^ Erode(Bitmap^ source_image);
 
 };

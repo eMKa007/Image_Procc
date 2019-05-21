@@ -157,7 +157,7 @@
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\AutoTresholding.cpp" />
     <ClCompile Include="src\KirschFilt.cpp" />
-    <ClCompile Include="src\LinearClosure.cpp" />
+    <ClCompile Include="src\CloseOpenLinear.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -168,7 +168,7 @@
     <ClInclude Include="include\AutoTresholding.h" />
     <ClInclude Include="include\Headers.h" />
     <ClInclude Include="include\KirschFilt.h" />
-    <ClInclude Include="include\LinearClosure.h" />
+    <ClInclude Include="include\CloseOpenLinear.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

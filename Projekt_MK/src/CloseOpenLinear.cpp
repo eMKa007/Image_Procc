@@ -1,7 +1,7 @@
 
-#include "../include/LinearClosure.h"
+#include "../include/CloseOpenLinear.h"
 
-LinearClosure::LinearClosure(Bitmap ^ InputImage)
+CloseOpenLinear::CloseOpenLinear(Bitmap ^ InputImage)
 {
 	if (InputImage->PixelFormat != Imaging::PixelFormat::Format24bppRgb)
 	{
@@ -17,21 +17,32 @@ LinearClosure::LinearClosure(Bitmap ^ InputImage)
 	
 }
 
-LinearClosure::~LinearClosure()
+CloseOpenLinear::~CloseOpenLinear()
 {
 	delete OutputImage;
 	delete StructuralElement;
 }
 
 /*	----------------------------------------------------------
-*	Function name:	Compute()
+*	Function name:	imclose()
 *	Parameters:		None.
-*	Used to:		Start processing.
+*	Used to:		Start image close processing.
 *	Return:			Bitmap^ Image* - output computed image
 */
-Bitmap^ LinearClosure::Compute()
+Bitmap^ CloseOpenLinear::imclose()
 {
-	return Erosion(Dilatation( Img ));
+	return Erode(Dilate( Img ));
+}
+
+/*	----------------------------------------------------------
+*	Function name:	imopen()
+*	Parameters:		None.
+*	Used to:		Start image open processing.
+*	Return:			Bitmap^ Image* - output computed image
+*/
+Bitmap^ CloseOpenLinear::imopen()
+{
+	return Dilate( Erode( Img ) );
 }
 
 /* -------------------  Auxiliary Functions -------------------  */
@@ -43,7 +54,7 @@ Bitmap^ LinearClosure::Compute()
 *	Used to:		Create Morphological structural element used in Erosion/Dilatation
 *	Return:			None. Structural element vector is filled.
 */
-void LinearClosure::CreateStructuralElement( int length, int degree)
+void CloseOpenLinear::CreateStructuralElement( int length, int degree)
 {
 	/* Create container for structural element */
 	StructuralElement = new vector<int>;
@@ -99,7 +110,7 @@ void LinearClosure::CreateStructuralElement( int length, int degree)
 *	Used to:		Interact with user to choose desired element length.
 *	Return:			Element length.
 */
-int LinearClosure::GetLength() 
+int CloseOpenLinear::GetLength() 
 {
 	int			Choice = 0;
 	bool		Picked = false;
@@ -129,7 +140,7 @@ int LinearClosure::GetLength()
 *	Used to:		Interact with user to choose desired element rotation.
 *	Return:			Rotation degree to OX axis.
 */
-int LinearClosure::GetDegree()
+int CloseOpenLinear::GetDegree()
 {
 	int			Choice = 0;
 	bool		Picked = false;
@@ -159,7 +170,7 @@ int LinearClosure::GetDegree()
 *	Used to:		Apply Dilatation with linear element to input image.
 *	Return:			None. Output Image is updated.
 */
-Bitmap^ LinearClosure::Dilatation( Bitmap^ SourceImage )
+Bitmap^ CloseOpenLinear::Dilate( Bitmap^ SourceImage )
 {
 	for( int x = 0; x < Img->Width-1; x++)
 		for( int y = 0; y < Img->Height-1; y++)
@@ -202,7 +213,7 @@ Bitmap^ LinearClosure::Dilatation( Bitmap^ SourceImage )
 *	Used to:		Apply Erosion with linear element to input image.
 *	Return:			None. Output Image is updated.
 */
-Bitmap^ LinearClosure::Erosion( Bitmap^ SourceImage )
+Bitmap^ CloseOpenLinear::Erode( Bitmap^ SourceImage )
 {
 	for( int x = 0; x < Img->Width-1; x++)
 		for( int y = 0; y < Img->Height-1; y++)
@@ -210,7 +221,7 @@ Bitmap^ LinearClosure::Erosion( Bitmap^ SourceImage )
 			int actual_max_value = 0;
 
 			/* For every pixel inside structural element compute value */
-			for( int idx = 0; idx < StructuralElement->size(); idx++)
+			for( int idx = 0; idx < (StructuralElement->size() ); idx++)
 			{
 				/* Ignore pixels with values 0. They are not used. */
 				if( !StructuralElement->at( idx ) )

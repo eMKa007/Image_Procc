@@ -96,10 +96,10 @@ void Start(Bitmap^ Img, String^ FilePath, int Pick)
 			ResultBitmap->Save(ChangeFileName(FilePath, "_KirschFiltration.bmp"));
 		} break;
 
-		case EProcess::ELinearClosure:
+		case EProcess::ECloseOpenLinear:
 		{
-			LinearClosure^ LinearClose = gcnew LinearClosure(Img);
-			ResultBitmap = LinearClose->Compute();
+			CloseOpenLinear^ LinearClose = gcnew CloseOpenLinear(Img);
+			ResultBitmap = LinearClose->imclose();
 			ResultBitmap->Save(ChangeFileName(FilePath, "_Closure.bmp"));
 		} break;
 

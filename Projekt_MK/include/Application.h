@@ -3,14 +3,14 @@
 #include "Headers.h"
 #include "AutoTresholding.h"
 #include "KirschFilt.h"
-#include "LinearClosure.h"
+#include "CloseOpenLinear.h"
 
 enum class EProcess
 {
 	ENone,
 	EAutoTreshold,
 	EKirshFiltration,
-	ELinearClosure,
+	ECloseOpenLinear,
 	EConvexSurrounding
 };
 

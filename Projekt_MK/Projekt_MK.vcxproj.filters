@@ -27,7 +27,7 @@
     <ClCompile Include="src\KirschFilt.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\LinearClosure.cpp">
+    <ClCompile Include="src\CloseOpenLinear.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,7 +44,7 @@
     <ClInclude Include="include\KirschFilt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\LinearClosure.h">
+    <ClInclude Include="include\CloseOpenLinear.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
