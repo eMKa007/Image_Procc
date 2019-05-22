@@ -134,7 +134,7 @@ void KirschFilt::RotateMask45(array<int, 9>* Mask)
 *	Used to:		Replicate border from Image to TempImage
 *	Return:			None. TempImage is filled.
 */
-void KirschFilt::ReplicateBorderValues(System::Drawing::Bitmap ^ TempImage, System::Drawing::Bitmap ^ Image)
+void KirschFilt::ReplicateBorderValues(Bitmap ^ TempImage, System::Drawing::Bitmap ^ Image)
 {
 	//Copy Left-Top corner.
 	TempImage->SetPixel(0, 0, Image->GetPixel(0, 0));
@@ -188,6 +188,7 @@ void KirschFilt::FiltChannelsRGB()
 			MaxGValue = 0;
 			MaxBValue = 0;
 
+			/* Get all pixels used in this moment filtration */
 			Color Px1 = Img->GetPixel(x - 1, y - 1);
 			Color Px2 = Img->GetPixel(x,	 y - 1);
 			Color Px3 = Img->GetPixel(x + 1, y - 1);
@@ -199,7 +200,7 @@ void KirschFilt::FiltChannelsRGB()
 			Color Px9 = Img->GetPixel(x + 1, y + 1);
 
 
-			//Compute Values for Central pixel with 8 Kirsch Masks.
+			/* Compute Values for Central pixel with 8 Kirsch Masks. */
 			for (int i = 0; i < KirschMasks->size(); i++)
 			{
 				int PixValueR = 0;
