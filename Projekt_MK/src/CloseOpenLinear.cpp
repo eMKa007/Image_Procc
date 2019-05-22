@@ -59,6 +59,13 @@ void CloseOpenLinear::CreateStructuralElement( int length, int degree)
 	/* Create container for structural element */
 	StructuralElement = new vector<int>;
 
+	bool revert = false;
+	if( degree > 90 )
+	{
+		degree -= 90;
+		revert = true;
+	}
+
 	/* Calculate size of structural element matrix */
 	structural_element_height = Math::Abs(Math::Ceiling(Math::Sin( Math::PI * degree / 180.0 ) * length));
 	structural_element_width = Math::Abs( Math::Ceiling(Math::Cos( Math::PI * degree / 180.0 ) * length));
@@ -73,6 +80,8 @@ void CloseOpenLinear::CreateStructuralElement( int length, int degree)
 
 	/* Line equation -> y = ax + b; */
 	/* Calculate line factors */
+	
+
 	double Coef_a = Math::Round(Math::Tan(Math::PI * degree / 180.0) * 10) / 10;
 	double Coef_b = Coef_a < 0 ? 0 : -(structural_element_height - 1);
 
@@ -93,14 +102,42 @@ void CloseOpenLinear::CreateStructuralElement( int length, int degree)
 		StructuralElement->at( offset ) = 1;
 	}
 
-	/* Print to console computed structural element */
-	for (int i = 0; i < StructuralElement->size(); i++)
+	//Revert matrix.
+	if( revert )
 	{
-		printf("  %d  ", StructuralElement->at(i));
-		if (i % structural_element_width == structural_element_width - 1)
-			printf("\n");
+		int y = structural_element_height;
+		int x = structural_element_width;
+
+		for( int i = 0; i < y/2; i++)
+		{
+			for( int j = 0; j < x; j++)
+			{
+				int temp0 = StructuralElement->at( i * structural_element_width + j );
+				StructuralElement->at( i * structural_element_width + j ) = StructuralElement->at( (structural_element_height - i-1) * structural_element_width + j );
+				StructuralElement->at( (structural_element_height - i-1) * structural_element_width + j ) = temp0;
+			}
+		}
+
+		/* Print to console computed structural element */
+		for (int i = 0; i < StructuralElement->size(); i++)
+		{
+			printf("  %d  ", StructuralElement->at(i));
+			if (i % structural_element_width == structural_element_width - 1)
+				printf("\n");
+		}
 	}
 
+	if( !revert )
+	{
+		/* Print to console computed structural element */
+		for (int i = 0; i < StructuralElement->size(); i++)
+		{
+			printf("  %d  ", StructuralElement->at(i));
+			if (i % structural_element_width == structural_element_width - 1)
+				printf("\n");
+		}
+	}
+	
 	printf(" \n Anchor at: %d  %d", structural_element_anchor_x, structural_element_anchor_y);
 }
 

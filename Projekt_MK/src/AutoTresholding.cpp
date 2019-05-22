@@ -71,7 +71,7 @@ void AutoTresholding::Rgb2Gray()
 		for (int ky = 0; ky < Img->Height; ky++)
 		{
 			Color OldColor	= Img->GetPixel(kx, ky);
-			int grayScale	= (int)round((OldColor.R * 0.3) + (OldColor.G * 0.59) + (OldColor.B * 0.11));			
+			int grayScale	= (int)((OldColor.R * 0.3f) + (OldColor.G * 0.59f) + (OldColor.B * 0.11f));			
 
 			// Grayscale image stored in 24bits bitmap instead of 8bit. Memory overhead. 
 			Img->SetPixel(kx, ky, Color::FromArgb(grayScale, grayScale, grayScale));
@@ -100,12 +100,10 @@ double AutoTresholding::ComputeHistogramEntropy(int StartIdx, int EndIdx)
 		if (HistogramTempVal == 0)
 			continue;
 
-		ImgEntropy += (HistogramTempVal / TotalPx) * Math::Log((HistogramTempVal / TotalPx), Math::E);
+		ImgEntropy += (HistogramTempVal / static_cast<double>(TotalPx) * Math::Log((HistogramTempVal / TotalPx), Math::E) );
 	}
 
-	ImgEntropy = -ImgEntropy;
-
-	return ImgEntropy;
+	return -ImgEntropy;
 }
 
 /*	----------------------------------------------------------
@@ -161,7 +159,7 @@ void AutoTresholding::TresholdEntropyValues(vector<double>* kValues)
 	int	BackgroundPx = 0;
 	int ForegroundPx = 0;
 
-	for (unsigned int i = 1; i < (Histogram->size() - 1); i++)
+	for (unsigned int i = 1; i <= (Histogram->size() - 1); i++)
 	{
 		//Compute number of pixels of background.
 		for (unsigned int k = 0; k < i; k++)
@@ -172,7 +170,6 @@ void AutoTresholding::TresholdEntropyValues(vector<double>* kValues)
 		// ---------------------------------------------------------------------------------
 
 		double EntropyI = ComputeHistogramEntropy(0, i);
-		//double EntropyFg = ComputeHistogramEntropy(i + 1, HistogramSize);
 
 		(*kValues)[i] = (1.f / BackgroundPx) * EntropyI + (1.f / ForegroundPx) * EntropyI;
 
