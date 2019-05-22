@@ -32,4 +32,6 @@ public ref class CloseOpenLinear
 
 		Bitmap^ Erode(Bitmap^ source_image);
 
+		void print_structural_el();
+
 };

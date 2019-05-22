@@ -58,14 +58,43 @@ void CloseOpenLinear::CreateStructuralElement( int length, int degree)
 {
 	/* Create container for structural element */
 	StructuralElement = new vector<int>;
+	
+	if ( degree == 0 )
+	{
+		/* Calculate size of structural element matrix */
+		structural_element_height = 1;
+		structural_element_width = length;
+		structural_element_anchor_x = length/2;
+		structural_element_anchor_y = 0;
+
+		StructuralElement->resize( length );
+		std::fill(StructuralElement->begin(), StructuralElement->end(), 1);
+
+		print_structural_el();
+
+		return;
+	}
+	else if( degree == 90 )
+	{
+		structural_element_height = length;
+		structural_element_width = 1;
+		structural_element_anchor_x = 0;
+		structural_element_anchor_y = length/2;
+
+		StructuralElement->resize( length );
+		std::fill(StructuralElement->begin(), StructuralElement->end(), 1);
+
+		print_structural_el();
+
+		return;
+	}
 
 	bool revert = false;
 	if( degree > 90 )
 	{
-		degree -= 90;
+		degree = 180 - degree;
 		revert = true;
 	}
-
 	/* Calculate size of structural element matrix */
 	structural_element_height = Math::Abs(Math::Ceiling(Math::Sin( Math::PI * degree / 180.0 ) * length));
 	structural_element_width = Math::Abs( Math::Ceiling(Math::Cos( Math::PI * degree / 180.0 ) * length));
@@ -75,15 +104,14 @@ void CloseOpenLinear::CreateStructuralElement( int length, int degree)
 	std::fill(StructuralElement->begin(), StructuralElement->end(), 0);
 
 	/* Compute centre of structural element */
-	structural_element_anchor_x = + Math::Floor( structural_element_width /2.f );
+	structural_element_anchor_x = Math::Floor( structural_element_width /2.f );
 	structural_element_anchor_y = Math::Floor( structural_element_height/2.f );
 
 	/* Line equation -> y = ax + b; */
 	/* Calculate line factors */
-	
-
 	double Coef_a = Math::Round(Math::Tan(Math::PI * degree / 180.0) * 10) / 10;
-	double Coef_b = Coef_a < 0 ? 0 : -(structural_element_height - 1);
+	double Coef_b = -(structural_element_height - 1);
+
 
 	/* Put 1 into structural element matrix where line is inside pixel */
 	for (double idx = 0; idx < structural_element_width; idx += 0.1)
@@ -92,7 +120,11 @@ void CloseOpenLinear::CreateStructuralElement( int length, int degree)
 		float x = Math::Floor(idx);
 
 		if (Coef_a * idx + Coef_b > 0)
+		{
+			StructuralElement->at( structural_element_width - 1 ) = 1;
 			break;
+		}
+			
 
 		double y = Math::Ceiling( Math::Abs( Coef_a * idx + Coef_b ));
 
@@ -102,7 +134,7 @@ void CloseOpenLinear::CreateStructuralElement( int length, int degree)
 		StructuralElement->at( offset ) = 1;
 	}
 
-	//Revert matrix.
+	/* Because calculated one is upside down. */
 	if( revert )
 	{
 		int y = structural_element_height;
@@ -117,28 +149,12 @@ void CloseOpenLinear::CreateStructuralElement( int length, int degree)
 				StructuralElement->at( (structural_element_height - i-1) * structural_element_width + j ) = temp0;
 			}
 		}
-
-		/* Print to console computed structural element */
-		for (int i = 0; i < StructuralElement->size(); i++)
-		{
-			printf("  %d  ", StructuralElement->at(i));
-			if (i % structural_element_width == structural_element_width - 1)
-				printf("\n");
-		}
-	}
-
-	if( !revert )
-	{
-		/* Print to console computed structural element */
-		for (int i = 0; i < StructuralElement->size(); i++)
-		{
-			printf("  %d  ", StructuralElement->at(i));
-			if (i % structural_element_width == structural_element_width - 1)
-				printf("\n");
-		}
 	}
 	
+	print_structural_el();
+	
 	printf(" \n Anchor at: %d  %d", structural_element_anchor_x, structural_element_anchor_y);
+
 }
 
 /*	----------------------------------------------------------
@@ -285,4 +301,21 @@ Bitmap^ CloseOpenLinear::Erode( Bitmap^ SourceImage )
 
 
 	return OutputImage;
+}
+
+/*	----------------------------------------------------------
+*	Function name:	print_structural_el()
+*	Parameters:		None.
+*	Used to:		Print to console structural element.
+*	Return:			None. 
+*/
+void CloseOpenLinear::print_structural_el()
+{
+	/* Print to console computed structural element */
+	for (int i = 0; i < StructuralElement->size(); i++)
+	{
+		printf("  %d  ", StructuralElement->at(i));
+		if (i % structural_element_width == structural_element_width - 1)
+			printf("\n");
+	}
 }
