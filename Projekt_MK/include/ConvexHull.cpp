@@ -9,8 +9,7 @@ ConvexHull::ConvexHull(Bitmap ^ InputImage)
 		InputImage = clonedOne;
 	}
 
-	temp_image1 = InputImage;
-	temp_image2 = InputImage->Clone( Rectangle(0,0, InputImage->Width, InputImage->Height), Imaging::PixelFormat::Format24bppRgb);
+	SourceImage = InputImage;
 
 	convex_masks = new array< array< int, 9>*, 8>;
 	convex_masks->fill(nullptr);
@@ -24,7 +23,7 @@ ConvexHull::ConvexHull(Bitmap ^ InputImage)
 
 ConvexHull::~ConvexHull()
 {
-	delete temp_image2;
+	delete SourceImage;
 
 	for (int i = 0; i < 8; i++)
 	{
@@ -34,11 +33,16 @@ ConvexHull::~ConvexHull()
 	delete convex_masks;
 }
 
+/*	----------------------------------------------------------
+*	Function name:	Compute()
+*	Parameters:		None.
+*	Used to:		Main function. Used to fill masks, and start computing.
+*	Return:			None. Convex Hull of image is created.
+*/
 Bitmap^ ConvexHull::Compute()
 {
 	fill_masks();
 	return compute_hull();	
-
 }
 
 /* -------------------  Auxiliary Functions -------------------  */
@@ -113,8 +117,6 @@ void ConvexHull::rotate_mask45(array<int, 9>* Mask)
 */
 Bitmap^ ConvexHull::compute_hull()
 {
-	/* Now we'll treat input image like output image - temporary container for output bitmap*/
-
 	/* Init number of pixels changed to some big value */
 	array<Color*, 9>* Pixels = new array<Color*, 9>;
 
@@ -124,175 +126,61 @@ Bitmap^ ConvexHull::compute_hull()
 		Pixels->at(i) = nullptr;
 	}
 
-	int pixel_changed = temp_image1->Width * temp_image1->Height;
-	bool from_input_image = false;
+	/* Init pixel_changed value to true, just to get inside while loop */
+	int pixel_changed = 1;
 
-	/* Compute convex while there are pixels changed. */
+	/* Make computations while any pixel changed. */
 	while( pixel_changed )
 	{
-		/* read one by one from input/output image */
-		from_input_image = ( from_input_image == true ? false : true );
-
 		pixel_changed = 0;
 
-		if( from_input_image )   /* Compute from input image (1) to output one (2) */
+		/* Go through all image pixels */
+		for( int x = 1; x < SourceImage->Width-1; x++ )
 		{
-			for (int i = 0; i < convex_masks->size(); i++)
+			for( int y = 1; y < SourceImage->Height-1; y++)
 			{
-				for( int x = 0; x < temp_image1->Width; x++ )
+				/* Go to next if central pixel is == 0*/
+				if( SourceImage->GetPixel(x,y).R == 255 )
+					continue;
+
+				/* Get access to every pixel we have to deal with in this iteration */
+				Pixels->at(0) = &SourceImage->GetPixel(x - 1, y - 1);
+				Pixels->at(1) = &SourceImage->GetPixel(x,	 y - 1);
+				Pixels->at(2) = &SourceImage->GetPixel(x + 1, y - 1);
+				Pixels->at(3) = &SourceImage->GetPixel(x - 1, y);
+				Pixels->at(4) = &SourceImage->GetPixel(x,	 y);
+				Pixels->at(5) = &SourceImage->GetPixel(x + 1, y);
+				Pixels->at(6) = &SourceImage->GetPixel(x - 1, y + 1);
+				Pixels->at(7) = &SourceImage->GetPixel(x,	 y + 1);
+				Pixels->at(8) = &SourceImage->GetPixel(x + 1, y + 1);
+
+				/* For that pixel compute mask. */
+				for (int i = 0; i < convex_masks->size(); i++)
 				{
-					for( int y = 0; y < temp_image1->Height; y++)
+					/* Number of pixels matched with this mask */
+					int match_pixels = 0;
+					
+					for( int j = 0; j< 9; j++ )
 					{
-						/* Number of pixels matched with mask */
-						int match_pixels = 0;
-
-						if( temp_image2->GetPixel(x,y).R == 255)
-							continue;
-
-						Color* Temp = &Color::FromArgb(100,100,100);
-						fill(Pixels->begin(), Pixels->end(), Temp);
-
-						/* Be sure, that pixels are inside image. */
-						if( (x -1) > 0 && (y-1) > 0)
-						{
-							Pixels->at(0) = &temp_image1->GetPixel(x - 1, y - 1);
-						}
-
-						if( (y - 1) > 0 )
-						{
-							Pixels->at(1) = &temp_image1->GetPixel(x,	 y - 1);
-						}
-
-						if( ( x + 1) < temp_image1->Width && (y-1)>0)
-						{
-							Pixels->at(2) = &temp_image1->GetPixel(x + 1, y - 1);
-						}
-
-						if( (x-1) > 0 )
-						{
-							Pixels->at(3) = &temp_image1->GetPixel(x - 1, y);
-						}
-
-						Pixels->at(4) = &temp_image1->GetPixel(x,	 y);
-
-						if( (x+1) < temp_image1->Width)
-						{
-							Pixels->at(5) = &temp_image1->GetPixel(x + 1, y);
-						}
-
-						if( (x -1) > 0 && (y+1) < temp_image1->Height)
-						{
-							Pixels->at(6) = &temp_image1->GetPixel(x - 1, y + 1);
-						}
-
-						if( (y+1) < temp_image1->Height)
-						{
-							Pixels->at(7) = &temp_image1->GetPixel(x,	 y + 1);
-						}
-
-						if( (x+1) < temp_image1->Width && (y+1) < temp_image1->Height )
-						{
-							Pixels->at(8) = &temp_image1->GetPixel(x + 1, y + 1);
-						}
-
-						for( int j = 0; j< 9; j++ )
-						{
-							if( convex_masks->at(i)->at(j) == 1 && Pixels->at(j)->R == 255 && Pixels->at(j)->G == 255 && Pixels->at(j)->B == 255)
-								match_pixels++;
-							else if (convex_masks->at(i)->at(j) == 0 && Pixels->at(j)->R == 0 && Pixels->at(j)->G == 0 && Pixels->at(j)->B == 0)
-								match_pixels++;
-						}
-
-						if( match_pixels >= 6)
-						{
-							temp_image2->SetPixel(x, y, Color::FromArgb(255, 255, 255) );
-							pixel_changed++;
-						}
+						if( convex_masks->at(i)->at(j) == 1 && Pixels->at(j)->R == 255 && Pixels->at(j)->G == 255 && Pixels->at(j)->B == 255)
+							match_pixels++;
+						else if (convex_masks->at(i)->at(j) == 0 && Pixels->at(j)->R == 0 && Pixels->at(j)->G == 0 && Pixels->at(j)->B == 0)
+							match_pixels++;
 					}
-				}
-			}
-		}
-		else	/* From output image (2) to input one (1). */
-		{
-			for (int i = 0; i < convex_masks->size(); i++)
-			{
-				for( int x = 0; x < temp_image2->Width; x++ )
-				{
-					for( int y = 0; y < temp_image2->Height; y++)
+
+					/* If any mask match, fill pixel at coordinates x,y and go to nex one. */
+					if( match_pixels >= 6)
 					{
-						/* Number of pixels matched with mask */
-						int match_pixels = 0;
-
-						if( temp_image1->GetPixel(x,y).R == 255 )
-							continue;
-
-						Color* Temp = &Color::FromArgb(100,100,100);
-						fill(Pixels->begin(), Pixels->end(), Temp);
-
-						/* Be sure, that pixels are inside image. */
-						if( (x -1) > 0 && (y-1) > 0)
-						{
-							Pixels->at(0) = &temp_image2->GetPixel(x - 1, y - 1);
-							
-						}
-
-						if( (y - 1) > 0 )
-						{
-							Pixels->at(1) = &temp_image2->GetPixel(x,	 y - 1);
-						}
-
-						if( ( x + 1) < temp_image2->Width && (y-1)>0)
-						{
-							Pixels->at(2) = &temp_image2->GetPixel(x + 1, y - 1);
-						}
-
-						if( (x-1) > 0 )
-						{
-							Pixels->at(3) = &temp_image2->GetPixel(x - 1, y);
-						}
-
-						Pixels->at(4) = &temp_image2->GetPixel(x,	 y);
-
-						if( (x+1) < temp_image2->Width)
-						{
-							Pixels->at(5) = &temp_image2->GetPixel(x + 1, y);
-						}
-
-						if( (x -1) > 0 && (y+1) < temp_image2->Height)
-						{
-							Pixels->at(6) = &temp_image2->GetPixel(x - 1, y + 1);
-						}
-
-						if( (y+1) < temp_image2->Height)
-						{
-							Pixels->at(7) = &temp_image2->GetPixel(x,	 y + 1);
-						}
-
-						if( (x+1) < temp_image2->Width && (y+1) < temp_image2->Height )
-						{
-							Pixels->at(8) = &temp_image2->GetPixel(x + 1, y + 1);
-						}
-
-						for( int j = 0; j< 9; j++ )
-						{
-							if( convex_masks->at(i)->at(j) == 1 && Pixels->at(j)->R == 255 && Pixels->at(j)->G == 255 && Pixels->at(j)->B == 255)
-								match_pixels++;
-							else if (convex_masks->at(i)->at(j) == 0 && Pixels->at(j)->R == 0 && Pixels->at(j)->G == 0 && Pixels->at(j)->B == 0)
-								match_pixels++;
-						}
-
-						if( match_pixels >= 6 )
-						{
-							temp_image1->SetPixel(x, y, Color::FromArgb(255, 255, 255) );
-							pixel_changed++;
-						}
+						SourceImage->SetPixel(x, y, Color::FromArgb(255, 255, 255) );
+						pixel_changed++;
+						break;
 					}
 				}
 			}
 		}
 	}
 
-	return ( from_input_image == true ? temp_image2 : temp_image1 );
+	return SourceImage;
 }
 
 

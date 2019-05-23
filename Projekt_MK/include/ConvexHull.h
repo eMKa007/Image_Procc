@@ -11,8 +11,7 @@ public ref class ConvexHull
 		Bitmap^ Compute();
 
 	private:
-		Bitmap^ temp_image1;
-		Bitmap^ temp_image2;
+		Bitmap^ SourceImage;
 		array< array<int, 9>*, 8>* convex_masks;
 
 		/* -------------------  Auxiliary Functions -------------------  */

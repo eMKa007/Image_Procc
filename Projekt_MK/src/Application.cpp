@@ -127,8 +127,9 @@ void PrintUsage()
 {
 	printf("\nImage Processing console application.");
 	printf("\n\n\tUsage: Projekt_MK.exe <path>");
-	printf("\n\n\t\t<path>   -   Name or path to *.bmp file.");
-	printf("\n\nApplication accepts any *.bmp file (RGB or Mono).\n");
+	printf("\n\n\t\t<path>   -   Name or path to image file.");
+	printf("\n\nApplication accepts image files (RGB or Mono).\n");
+	printf("Tested extensions: *.jpg   *.bmp   *.png .\n");
 	printf("It is used to process image in specific, user defined way.\n");
 	printf("For more information visit: https://github.com/eMKa007/Image_Procc\n");
 }
@@ -163,6 +164,6 @@ void PrintChoiceInfo()
 	printf("\t1. Automatic tresholding with max entrophy method (RGB or Mono image).\n");
 	printf("\t2. Kirsch filtering. Symmetric reflection (RGB or Mono image).\n");
 	printf("\t3. Image closure with linear element (Mono or Binary image).\n");
-	printf("\t4. Convex surrounding. (Binary Image)\n");
+	printf("\t4. Convex Hull. (Binary Image)\n");
 	printf("\n\t0. Do nothing, exit program.\n");
 }

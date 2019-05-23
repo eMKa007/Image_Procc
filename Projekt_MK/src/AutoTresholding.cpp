@@ -33,7 +33,7 @@ Bitmap ^ AutoTresholding::Compute()
 
 	ComputeHistogram();
 
-	double	ImgEntropy	= ComputeHistogramEntropy(0, Histogram->size());
+	//double	ImgEntropy	= ComputeHistogramEntropy(0, Histogram->size());
 	int		TresholdVal = ComputeMaxEntropy();
 
 	Image2Binary(TresholdVal);
@@ -93,17 +93,17 @@ double AutoTresholding::ComputeHistogramEntropy(int StartIdx, int EndIdx)
 
 	int TotalPx = Img->Width * Img->Height;
 
-	for (int i = StartIdx; i < EndIdx; i++)
+	for (int i = StartIdx; i <= EndIdx; i++)
 	{
 		double HistogramTempVal = (*Histogram)[i];
 
 		if (HistogramTempVal == 0)
 			continue;
 
-		ImgEntropy += (HistogramTempVal / static_cast<double>(TotalPx) * Math::Log((HistogramTempVal / TotalPx), Math::E) );
+		ImgEntropy += HistogramTempVal * Math::Log((HistogramTempVal / TotalPx), 2) / TotalPx;
 	}
 
-	return -ImgEntropy;
+	return ImgEntropy;
 }
 
 /*	----------------------------------------------------------
@@ -159,19 +159,23 @@ void AutoTresholding::TresholdEntropyValues(vector<double>* kValues)
 	int	BackgroundPx = 0;
 	int ForegroundPx = 0;
 
-	for (unsigned int i = 1; i <= (Histogram->size() - 1); i++)
+	for (unsigned int i = 1; i < (Histogram->size() - 1); i++)
 	{
 		//Compute number of pixels of background.
-		for (unsigned int k = 0; k < i; k++)
+		for (unsigned int k = 0; k <= i; k++)
 			BackgroundPx += (*Histogram)[i];
+
+		if( !BackgroundPx )
+			continue;
 		
 		ForegroundPx = ImageSize - BackgroundPx;
 
 		// ---------------------------------------------------------------------------------
 
-		double EntropyI = ComputeHistogramEntropy(0, i);
+		double EntropyLow = ComputeHistogramEntropy(0, i);
+		double EntropyHigh = ComputeHistogramEntropy(i+1, HistogramSize-1);
 
-		(*kValues)[i] = (1.f / BackgroundPx) * EntropyI + (1.f / ForegroundPx) * EntropyI;
+		(*kValues)[i] = (-1.f / BackgroundPx) * EntropyLow - (1.f / ForegroundPx) * EntropyHigh;
 
 		// ---------------------------------------------------------------------------------
 	}

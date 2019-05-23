@@ -112,7 +112,6 @@ void CloseOpenLinear::CreateStructuralElement( int length, int degree)
 	double Coef_a = Math::Round(Math::Tan(Math::PI * degree / 180.0) * 10) / 10;
 	double Coef_b = -(structural_element_height - 1);
 
-
 	/* Put 1 into structural element matrix where line is inside pixel */
 	for (double idx = 0; idx < structural_element_width; idx += 0.1)
 	{
@@ -125,7 +124,6 @@ void CloseOpenLinear::CreateStructuralElement( int length, int degree)
 			break;
 		}
 			
-
 		double y = Math::Ceiling( Math::Abs( Coef_a * idx + Coef_b ));
 
 		/* Calculate offset in 1d vector */
@@ -238,12 +236,15 @@ Bitmap^ CloseOpenLinear::Dilate( Bitmap^ SourceImage )
 					continue;
 
 				/* Actual structural idx element coordinates */
-				int se_x = Math::Floor(idx / structural_element_width);
-				int se_y = idx - se_x;
+				int se_y = Math::Floor(idx / structural_element_width);
+				int se_x = idx % structural_element_width;
 
 				/* Compute pixel coordinates on input image */
-				int image_x =  x + se_x - structural_element_anchor_x;
-				int image_y = y + se_y - structural_element_anchor_y;
+				int delta_x_mask = se_x - structural_element_anchor_x;
+				int delta_y_mask = se_y - structural_element_anchor_y;
+
+				int image_x =  x + delta_x_mask;
+				int image_y = y + delta_y_mask;
 
 				/* Prevent of accessing pixel out of input image */
 				if( image_x < 0 || image_y < 0 || image_x >= Img->Width || image_y >= Img->Height )
@@ -281,12 +282,15 @@ Bitmap^ CloseOpenLinear::Erode( Bitmap^ SourceImage )
 					continue;
 
 				/* Actual structural idx element coordinates */
-				int se_x = Math::Floor(idx / structural_element_width);
-				int se_y = idx - se_x;
+				int se_y = Math::Floor(idx / structural_element_width);
+				int se_x = idx % structural_element_width;
 
 				/* Compute pixel coordinates on input image */
-				int image_x =  x + se_x - structural_element_anchor_x;
-				int image_y = y + se_y - structural_element_anchor_y;
+				int delta_x_mask = se_x - structural_element_anchor_x;
+				int delta_y_mask = se_y - structural_element_anchor_y;
+
+				int image_x =  x + delta_x_mask;
+				int image_y = y + delta_y_mask;
 
 				/* Prevent of accessing pixel out of input image */
 				if( image_x < 0 || image_y < 0 || image_x >= Img->Width || image_y >= Img->Height )
