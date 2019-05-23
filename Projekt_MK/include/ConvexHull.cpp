@@ -82,7 +82,7 @@ void ConvexHull::fill_masks()
 }
 
 /*	----------------------------------------------------------
-*	Function name:	RotateMask45()
+*	Function name:	rotate_mask45()
 *	Parameters:		array<int, 9>* Mask - One of eight convex hull masks. 
 *	Used to:		Rotate given mask by 45deg.
 *	Return:			None. Input Mask is updated.

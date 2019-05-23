@@ -59,7 +59,7 @@ void CloseOpenLinear::CreateStructuralElement( int length, int degree)
 	/* Create container for structural element */
 	StructuralElement = new vector<int>;
 	
-	if ( degree == 0 )
+	if ( degree == 0 )	
 	{
 		/* Calculate size of structural element matrix */
 		structural_element_height = 1;
@@ -76,6 +76,7 @@ void CloseOpenLinear::CreateStructuralElement( int length, int degree)
 	}
 	else if( degree == 90 )
 	{
+		/* Calculate size of structural element matrix */
 		structural_element_height = length;
 		structural_element_width = 1;
 		structural_element_anchor_x = 0;
@@ -216,7 +217,7 @@ int CloseOpenLinear::GetDegree()
 }
 
 /*	----------------------------------------------------------
-*	Function name:	Dilatation()
+*	Function name:	Dilate()
 *	Parameters:		Bitmap^ SourceImage - desired image to apply dilatation to.
 *	Used to:		Apply Dilatation with linear element to input image.
 *	Return:			None. Output Image is updated.
@@ -261,7 +262,7 @@ Bitmap^ CloseOpenLinear::Dilate( Bitmap^ SourceImage )
 }
 
 /*	----------------------------------------------------------
-*	Function name:	Erosion()
+*	Function name:	Erode()
 *	Parameters:		Bitmap^ SourceImage - desired image to apply erosion to.
 *	Used to:		Apply Erosion with linear element to input image.
 *	Return:			None. Output Image is updated.
