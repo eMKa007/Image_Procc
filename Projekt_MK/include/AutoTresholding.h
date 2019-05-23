@@ -23,8 +23,10 @@ public ref class AutoTresholding
 		int ComputeMaxEntropy();
 
 		void Image2Binary(int TresholdValue);
-		
+
+
 		/* -------------------  Auxiliary Functions -------------------  */
+
 		void TresholdEntropyValues(vector<double>* kValues);
 
 		int MaxValue(vector<double>* kValues);

@@ -25,7 +25,6 @@ void Start(Bitmap^ Image, String^ FilePath, int Pick);
 
 void PrintUsage();
 
-
 /* -------------------  Auxiliary Functions -------------------  */
 
 String^ ChangeFileName(String^ FileName, String^ ExtensionReplacement);

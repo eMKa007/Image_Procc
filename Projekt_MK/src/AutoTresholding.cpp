@@ -20,11 +20,12 @@ AutoTresholding::~AutoTresholding()
 */
 Bitmap ^ AutoTresholding::Compute()
 {
+	/* Convert image to grayscale */
 	if (Img->PixelFormat == Imaging::PixelFormat::Format24bppRgb)
 	{
 		Rgb2Gray();
 	}
-	else		// Change Grayscale to 3 same channel.
+	else		/* Change Grayscale to 3 same channel. */
 	{
 		Rectangle BBox = Rectangle(0, 0, Img->Width, Img->Height);
 		Bitmap^ clonedOne = Img->Clone(BBox, Imaging::PixelFormat::Format24bppRgb);
@@ -33,8 +34,7 @@ Bitmap ^ AutoTresholding::Compute()
 
 	ComputeHistogram();
 
-	//double	ImgEntropy	= ComputeHistogramEntropy(0, Histogram->size());
-	int		TresholdVal = ComputeMaxEntropy();
+	int	TresholdVal = ComputeMaxEntropy();
 
 	Image2Binary(TresholdVal);
 
@@ -90,17 +90,24 @@ void AutoTresholding::Rgb2Gray()
 double AutoTresholding::ComputeHistogramEntropy(int StartIdx, int EndIdx)
 {
 	double ImgEntropy = 0.f;
-
-	int TotalPx = Img->Width * Img->Height;
+	int TotalPx = 0;
 
 	for (int i = StartIdx; i <= EndIdx; i++)
 	{
+		TotalPx = 0;
 		double HistogramTempVal = (*Histogram)[i];
 
 		if (HistogramTempVal == 0)
 			continue;
 
-		ImgEntropy += HistogramTempVal * Math::Log((HistogramTempVal / TotalPx), 2) / TotalPx;
+		/* Number of total pixels in this range. */
+		for( int j = StartIdx; j <= EndIdx; j++)
+			TotalPx += (*Histogram)[j];
+
+		/* Probability value of occurence in this range. */
+		double const prob_a = HistogramTempVal / TotalPx;
+
+		ImgEntropy += prob_a * Math::Log(prob_a, 2) ;
 	}
 
 	return ImgEntropy;
@@ -161,9 +168,8 @@ void AutoTresholding::TresholdEntropyValues(vector<double>* kValues)
 
 	for (unsigned int i = 1; i < (Histogram->size() - 1); i++)
 	{
-		//Compute number of pixels of background.
-		for (unsigned int k = 0; k <= i; k++)
-			BackgroundPx += (*Histogram)[i];
+		/* Compute number of pixels of background. */
+		BackgroundPx += (*Histogram)[i];
 
 		if( !BackgroundPx )
 			continue;
@@ -172,10 +178,10 @@ void AutoTresholding::TresholdEntropyValues(vector<double>* kValues)
 
 		// ---------------------------------------------------------------------------------
 
-		double EntropyLow = ComputeHistogramEntropy(0, i);
-		double EntropyHigh = ComputeHistogramEntropy(i+1, HistogramSize-1);
+		double const EntropyLow = ComputeHistogramEntropy(0, i);
+		double const EntropyHigh = ComputeHistogramEntropy(i+1, HistogramSize-1);
 
-		(*kValues)[i] = (-1.f / BackgroundPx) * EntropyLow - (1.f / ForegroundPx) * EntropyHigh;
+		(*kValues)[i] = - EntropyLow -  EntropyHigh ;
 
 		// ---------------------------------------------------------------------------------
 	}
