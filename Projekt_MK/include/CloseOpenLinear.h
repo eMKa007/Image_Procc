@@ -32,9 +32,9 @@ public ref class CloseOpenLinear
 		/* -------------------  Auxiliary Functions -------------------  */
 		void CreateStructuralElement(int length, int degree);
 
-		static int GetLength();
+		int GetLength();
 
-		static int GetDegree();
+		int GetDegree();
 
 		Bitmap^ Dilate(Bitmap^ source_image);
 

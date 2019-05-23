@@ -74,7 +74,7 @@ void CloseOpenLinear::CreateStructuralElement( int length, int degree)
 
 		return;
 	}
-	else if( degree == 90 )
+	else if( degree == 90 && degree == 180 )
 	{
 		/* Calculate size of structural element matrix */
 		structural_element_height = length;
@@ -169,10 +169,9 @@ int CloseOpenLinear::GetLength()
 
 	while (!Picked)
 	{
-		///TODO: What if number is soooo big?
 		printf("\nEnter valid desired line element length [in pixels]: ");
 
-		cin >> Choice;		
+		cin >> Choice;
 
 		if (Choice >= 0 && Choice <= (Img->Height < Img->Width ? Img->Height : Img->Width) )
 		{
@@ -199,7 +198,6 @@ int CloseOpenLinear::GetDegree()
 
 	while (!Picked)
 	{
-		///TODO: What if number is soooo big?
 		printf("\nEnter valid desired line element rotation degree [in degrees] <0-180>: ");
 
 		cin >> Choice;
