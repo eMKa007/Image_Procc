@@ -97,16 +97,16 @@ void CloseOpenLinear::CreateStructuralElement( int length, int degree)
 		revert = true;
 	}
 	/* Calculate size of structural element matrix */
-	structural_element_height = Math::Abs(Math::Ceiling(Math::Sin( Math::PI * degree / 180.0 ) * length));
-	structural_element_width = Math::Abs( Math::Ceiling(Math::Cos( Math::PI * degree / 180.0 ) * length));
+	structural_element_height = static_cast<int>( Math::Abs(Math::Ceiling(Math::Sin( Math::PI * degree / 180.0 ) * length)) );
+	structural_element_width = static_cast<int>( Math::Abs( Math::Ceiling(Math::Cos( Math::PI * degree / 180.0 ) * length)) );
 
 	/* Resize container to calculated size, and fill with zeros */
 	StructuralElement->resize( structural_element_width * structural_element_height );
 	std::fill(StructuralElement->begin(), StructuralElement->end(), 0);
 
 	/* Compute centre of structural element */
-	structural_element_anchor_x = Math::Floor( structural_element_width /2.f );
-	structural_element_anchor_y = Math::Floor( structural_element_height/2.f );
+	structural_element_anchor_x = static_cast<int>( Math::Floor( structural_element_width /2.f ) );
+	structural_element_anchor_y = static_cast<int>( Math::Floor( structural_element_height/2.f ) );
 
 	/* Line equation -> y = ax + b; */
 	/* Calculate line factors */
@@ -117,7 +117,7 @@ void CloseOpenLinear::CreateStructuralElement( int length, int degree)
 	for (double idx = 0; idx < structural_element_width; idx += 0.1)
 	{
 		idx = Math::Round(idx * 10) / 10;
-		float x = Math::Floor(idx);
+		int x = static_cast<int>( Math::Floor(idx) );
 
 		if (Coef_a * idx + Coef_b > 0)
 		{
@@ -128,7 +128,7 @@ void CloseOpenLinear::CreateStructuralElement( int length, int degree)
 		double y = Math::Ceiling( Math::Abs( Coef_a * idx + Coef_b ));
 
 		/* Calculate offset in 1d vector */
-		int offset = (y * structural_element_width + x);
+		int offset = static_cast<int>(y * structural_element_width + x);
 
 		StructuralElement->at( offset ) = 1;
 	}
@@ -228,14 +228,14 @@ Bitmap^ CloseOpenLinear::Dilate( Bitmap^ SourceImage )
 			int actual_min_value = 255;
 
 			/* For every pixel inside structural element compute value */
-			for( int idx = 0; idx < StructuralElement->size(); idx++)
+			for( unsigned int idx = 0; idx < StructuralElement->size(); idx++)
 			{
 				/* Ignore pixels with values 0. They are not used. */
 				if( !StructuralElement->at( idx ) )
 					continue;
 
 				/* Actual structural idx element coordinates */
-				int se_y = Math::Floor(idx / structural_element_width);
+				int se_y = static_cast<int>( Math::Floor(idx / structural_element_width) );
 				int se_x = idx % structural_element_width;
 
 				/* Compute pixel coordinates on input image */
@@ -273,14 +273,14 @@ Bitmap^ CloseOpenLinear::Erode( Bitmap^ SourceImage )
 			int actual_max_value = 0;
 
 			/* For every pixel inside structural element compute value */
-			for( int idx = 0; idx < (StructuralElement->size() ); idx++)
+			for( unsigned int idx = 0; idx < (StructuralElement->size() ); idx++)
 			{
 				/* Ignore pixels with values 0. They are not used. */
 				if( !StructuralElement->at( idx ) )
 					continue;
 
 				/* Actual structural idx element coordinates */
-				int se_y = Math::Floor(idx / structural_element_width);
+				int se_y = static_cast<int>( Math::Floor(idx / structural_element_width) );
 				int se_x = idx % structural_element_width;
 
 				/* Compute pixel coordinates on input image */
@@ -314,7 +314,7 @@ Bitmap^ CloseOpenLinear::Erode( Bitmap^ SourceImage )
 void CloseOpenLinear::print_structural_el()
 {
 	/* Print to console computed structural element */
-	for (int i = 0; i < StructuralElement->size(); i++)
+	for ( unsigned int i = 0; i < StructuralElement->size(); i++)
 	{
 		printf("  %d  ", StructuralElement->at(i));
 		if (i % structural_element_width == structural_element_width - 1)
