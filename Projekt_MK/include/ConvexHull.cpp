@@ -11,6 +11,7 @@ ConvexHull::ConvexHull(Bitmap ^ InputImage)
 
 	SourceImage = InputImage;
 
+	/* Create array for 8 masks, and fill them with starting values */
 	convex_masks = new array< array< int, 9>*, 8>;
 	convex_masks->fill(nullptr);
 
@@ -41,6 +42,7 @@ ConvexHull::~ConvexHull()
 */
 Bitmap^ ConvexHull::Compute()
 {
+	/* Create masks and process image. */
 	fill_masks();
 	return compute_hull();	
 }
@@ -55,6 +57,7 @@ Bitmap^ ConvexHull::Compute()
 */
 void ConvexHull::fill_masks()
 {
+	/* Initial values for first mask. Ether will be rotated */
 	array<int, 9>* Mask = new array<int, 9>;
 	Mask->at(0) =	1;
 	Mask->at(1) =	1;
@@ -66,6 +69,7 @@ void ConvexHull::fill_masks()
 	Mask->at(7) =	-1;
 	Mask->at(8) =	0;
 
+	/* Fill other masks. */
 	for (int y = 0; y < 8; y++)
 	{
 		for (int x = 0; x < 9; x++)

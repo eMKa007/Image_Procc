@@ -112,7 +112,7 @@ void Start(Bitmap^ Img, String^ FilePath, int Pick)
 
 		default:
 		{
-
+			throw "Invalid picked enum value. RIP [*]";
 		} break;
 	}
 }

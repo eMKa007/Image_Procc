@@ -2,6 +2,12 @@
 
 #include "Headers.h"
 
+/*
+ * ConvexHull class is used to compute convex hull
+ * of elements inside binary image. We are assuming 
+ * here, that image is binary :) and border values 
+ * are negative. 
+ */
 public ref class ConvexHull
 {
 	public:

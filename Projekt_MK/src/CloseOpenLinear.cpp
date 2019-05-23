@@ -151,7 +151,7 @@ void CloseOpenLinear::CreateStructuralElement( int length, int degree)
 	
 	print_structural_el();
 	
-	printf(" \n Anchor at: %d  %d", structural_element_anchor_x, structural_element_anchor_y);
+	printf(" \n Anchor at: %d  %d \n", structural_element_anchor_x, structural_element_anchor_y);
 
 }
 
@@ -256,7 +256,6 @@ Bitmap^ CloseOpenLinear::Dilate( Bitmap^ SourceImage )
 
 			OutputImage->SetPixel(x, y, Color::FromArgb(actual_min_value, actual_min_value , actual_min_value) );
 		}
-
 
 	return OutputImage;
 }

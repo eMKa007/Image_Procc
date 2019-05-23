@@ -2,6 +2,12 @@
 
 #include "Headers.h"
 
+/*
+ * KirschFilt class is used to apply edge detection
+ * processing to input image. Masks are created 
+ * during program runtime. Border values are replicated.
+ * RGB images are filtered every channel separately.
+ */
 public ref class KirschFilt
 {
 	public:

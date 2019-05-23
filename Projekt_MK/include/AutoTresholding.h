@@ -2,6 +2,13 @@
 
 #include "Headers.h"
 
+/*
+ * AutoTresholding class is used to binary image
+ * RGB, or gray-scale one. Binarization is process
+ * with maximum entropy method. 
+ * RGB image is transferred to gray-scale first, 
+ * after that histogram, and binarization take place.
+ */
 public ref class AutoTresholding
 {
 	public:
