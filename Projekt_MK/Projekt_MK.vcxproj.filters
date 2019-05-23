@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Projekt_MK.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Application.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
@@ -30,7 +27,10 @@
     <ClCompile Include="src\CloseOpenLinear.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\ConvexHull.cpp">
+    <ClCompile Include="Projekt_MK.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ConvexHull.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>

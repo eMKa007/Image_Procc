@@ -153,10 +153,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="include\ConvexHull.cpp" />
     <ClCompile Include="Projekt_MK.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\AutoTresholding.cpp" />
+    <ClCompile Include="src\ConvexHull.cpp" />
     <ClCompile Include="src\KirschFilt.cpp" />
     <ClCompile Include="src\CloseOpenLinear.cpp" />
   </ItemGroup>

@@ -1,4 +1,4 @@
-#include "ConvexHull.h"
+#include "../include/ConvexHull.h"
 
 ConvexHull::ConvexHull(Bitmap ^ InputImage)
 {
@@ -9,11 +9,11 @@ ConvexHull::ConvexHull(Bitmap ^ InputImage)
 		InputImage = clonedOne;
 	}
 
-	Img = InputImage;
-	OutputImage = InputImage->Clone( Rectangle(0,0, InputImage->Width, InputImage->Height), Imaging::PixelFormat::Format24bppRgb);
+	SourceImage = InputImage;
 
+	/* Create array for 8 masks, and fill them with starting values */
 	convex_masks = new array< array< int, 9>*, 8>;
-	convex_masks->fill(0);
+	convex_masks->fill(nullptr);
 
 	for (int i = 0; i < 8; i++)
 	{
@@ -24,7 +24,7 @@ ConvexHull::ConvexHull(Bitmap ^ InputImage)
 
 ConvexHull::~ConvexHull()
 {
-	delete OutputImage;
+	delete SourceImage;
 
 	for (int i = 0; i < 8; i++)
 	{
@@ -34,12 +34,17 @@ ConvexHull::~ConvexHull()
 	delete convex_masks;
 }
 
+/*	----------------------------------------------------------
+*	Function name:	Compute()
+*	Parameters:		None.
+*	Used to:		Main function. Used to fill masks, and start computing.
+*	Return:			None. Convex Hull of image is created.
+*/
 Bitmap^ ConvexHull::Compute()
 {
+	/* Create masks and process image. */
 	fill_masks();
-	compute_hull();	
-
-	return OutputImage;
+	return compute_hull();	
 }
 
 /* -------------------  Auxiliary Functions -------------------  */
@@ -52,6 +57,7 @@ Bitmap^ ConvexHull::Compute()
 */
 void ConvexHull::fill_masks()
 {
+	/* Initial values for first mask. Ether will be rotated */
 	array<int, 9>* Mask = new array<int, 9>;
 	Mask->at(0) =	1;
 	Mask->at(1) =	1;
@@ -63,6 +69,7 @@ void ConvexHull::fill_masks()
 	Mask->at(7) =	-1;
 	Mask->at(8) =	0;
 
+	/* Fill other masks. */
 	for (int y = 0; y < 8; y++)
 	{
 		for (int x = 0; x < 9; x++)
@@ -75,7 +82,7 @@ void ConvexHull::fill_masks()
 }
 
 /*	----------------------------------------------------------
-*	Function name:	RotateMask45()
+*	Function name:	rotate_mask45()
 *	Parameters:		array<int, 9>* Mask - One of eight convex hull masks. 
 *	Used to:		Rotate given mask by 45deg.
 *	Return:			None. Input Mask is updated.
@@ -112,10 +119,9 @@ void ConvexHull::rotate_mask45(array<int, 9>* Mask)
 *	Used to:		Compute convex hull of input binary image.
 *	Return:			None. Output image is updated.
 */
-void ConvexHull::compute_hull()
+Bitmap^ ConvexHull::compute_hull()
 {
 	/* Init number of pixels changed to some big value */
-	int pixel_changed = Img->Width * Img->Height;
 	array<Color*, 9>* Pixels = new array<Color*, 9>;
 
 	/* Initialise pixels array */
@@ -124,77 +130,40 @@ void ConvexHull::compute_hull()
 		Pixels->at(i) = nullptr;
 	}
 
-	/* Compute convex while there are pixels changed. */
+	/* Init pixel_changed value to true, just to get inside while loop */
+	int pixel_changed = 1;
+
+	/* Make computations while any pixel changed. */
 	while( pixel_changed )
 	{
 		pixel_changed = 0;
 
-		for (int i = 0; i < convex_masks->size(); i++)
+		/* Go through all image pixels */
+		for( int x = 1; x < SourceImage->Width-1; x++ )
 		{
-			for( int x = 0; x < Img->Width; x++ )
+			for( int y = 1; y < SourceImage->Height-1; y++)
 			{
-				for( int y = 0; y < Img->Height; y++)
+				/* Go to next if central pixel is == 0*/
+				if( SourceImage->GetPixel(x,y).R == 255 )
+					continue;
+
+				/* Get access to every pixel we have to deal with in this iteration */
+				Pixels->at(0) = &SourceImage->GetPixel(x - 1, y - 1);
+				Pixels->at(1) = &SourceImage->GetPixel(x,	 y - 1);
+				Pixels->at(2) = &SourceImage->GetPixel(x + 1, y - 1);
+				Pixels->at(3) = &SourceImage->GetPixel(x - 1, y);
+				Pixels->at(4) = &SourceImage->GetPixel(x,	 y);
+				Pixels->at(5) = &SourceImage->GetPixel(x + 1, y);
+				Pixels->at(6) = &SourceImage->GetPixel(x - 1, y + 1);
+				Pixels->at(7) = &SourceImage->GetPixel(x,	 y + 1);
+				Pixels->at(8) = &SourceImage->GetPixel(x + 1, y + 1);
+
+				/* For that pixel compute mask. */
+				for ( unsigned int i = 0; i < convex_masks->size(); i++)
 				{
-					/* Number of pixels matched with mask */
+					/* Number of pixels matched with this mask */
 					int match_pixels = 0;
-
-					Color* Temp = &Color::FromArgb(100,100,100);
-					fill(Pixels->begin(), Pixels->end(), Temp);
-/*
-					Pixels->at(0) = Color::FromArgb(100, 100, 100);
-					Pixels->at(1) = Color::FromArgb(100, 100, 100);
-					Pixels->at(2) = Color::FromArgb(100, 100, 100);
-					Pixels->at(3) = Color::FromArgb(100, 100, 100);
-					Pixels->at(4) = Color::FromArgb(100, 100, 100);
-					Pixels->at(5) = Color::FromArgb(100, 100, 100);
-					Pixels->at(6) = Color::FromArgb(100, 100, 100);
-					Pixels->at(7) = Color::FromArgb(100, 100, 100);
-					Pixels->at(8) = Color::FromArgb(100, 100, 100);
-*/
-					/* Be sure, that pixels are inside image. */
-					if( (x -1) > 0 && (y-1) > 0)
-					{
-						Pixels->at(0) = &Img->GetPixel(x - 1, y - 1);
-						
-					}
-
-					if( (y - 1) > 0 )
-					{
-						Pixels->at(1) = &Img->GetPixel(x,	 y - 1);
-					}
-
-					if( ( x + 1) < Img->Width && (y-1)>0)
-					{
-						Pixels->at(2) = &Img->GetPixel(x + 1, y - 1);
-					}
-
-					if( (x-1) > 0 )
-					{
-						Pixels->at(3) = &Img->GetPixel(x - 1, y);
-					}
-
-					Pixels->at(4) = &Img->GetPixel(x,	 y);
-
-					if( (x+1) < Img->Width)
-					{
-						Pixels->at(5) = &Img->GetPixel(x + 1, y);
-					}
-
-					if( (x -1) > 0 && (y+1) < Img->Height)
-					{
-						Pixels->at(6) = &Img->GetPixel(x - 1, y + 1);
-					}
-
-					if( (y+1) < Img->Height)
-					{
-						Pixels->at(7) = &Img->GetPixel(x,	 y + 1);
-					}
-
-					if( (x+1) < Img->Width && (y+1) < Img->Height )
-					{
-						Pixels->at(8) = &Img->GetPixel(x + 1, y + 1);
-					}
-
+					
 					for( int j = 0; j< 9; j++ )
 					{
 						if( convex_masks->at(i)->at(j) == 1 && Pixels->at(j)->R == 255 && Pixels->at(j)->G == 255 && Pixels->at(j)->B == 255)
@@ -203,19 +172,19 @@ void ConvexHull::compute_hull()
 							match_pixels++;
 					}
 
-					if( match_pixels >= 6 )
+					/* If any mask match, fill pixel at coordinates x,y and go to nex one. */
+					if( match_pixels >= 6)
 					{
-						OutputImage->SetPixel(x, y, Color::FromArgb(255, 255, 255) );
+						SourceImage->SetPixel(x, y, Color::FromArgb(255, 255, 255) );
 						pixel_changed++;
+						break;
 					}
 				}
 			}
 		}
-				
-
 	}
 
-
+	return SourceImage;
 }
 
 
