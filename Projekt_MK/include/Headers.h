@@ -1,9 +1,9 @@
 #pragma once
 
 /* Fast Light Toolkit Library */
-#include<FL/Fl.h>
-#include<FL/Fl_Box.h>
-#include<FL/Fl_Window.h>
+//#include<FL/Fl.h>
+//#include<FL/Fl_Box.h>
+//#include<FL/Fl_Window.h>
 
 #include <iostream>
 #include <array>
