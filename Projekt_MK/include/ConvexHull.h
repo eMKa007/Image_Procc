@@ -11,13 +11,13 @@
 public ref class ConvexHull
 {
 	public:
-		ConvexHull(Bitmap^ Image);
+		ConvexHull(Drawing::Bitmap^ Image);
 		~ConvexHull();
 
-		Bitmap^ Compute();
+		Drawing::Bitmap^ Compute();
 
 	private:
-		Bitmap^ SourceImage;
+		Drawing::Bitmap^ SourceImage;
 		array< array<int, 9>*, 8>* convex_masks;
 
 		/* -------------------  Auxiliary Functions -------------------  */
@@ -26,6 +26,6 @@ public ref class ConvexHull
 
 		void rotate_mask45(array<int, 9>* Mask);
 
-		Bitmap^ compute_hull();
+		Drawing::Bitmap^ compute_hull();
 
 };

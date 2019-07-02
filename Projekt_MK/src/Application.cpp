@@ -58,9 +58,9 @@ int PickProcess()
 *	Used to:		Construct Bitmap class, and check for if is valid.
 *	Return:			Constructed Bitmap class.
 */
-Bitmap^ ReadImage(String ^ FilePath)
+Drawing::Bitmap^ ReadImage(String ^ FilePath)
 {
-	Bitmap^ bmp = gcnew Bitmap(FilePath, true);
+	Drawing::Bitmap^ bmp = gcnew Drawing::Bitmap(FilePath, true);
 
 	if (!bmp || bmp->Height == 0 || bmp->Width == 0)
 		throw "Invalid input image. Select valid one please.";
@@ -75,9 +75,9 @@ Bitmap^ ReadImage(String ^ FilePath)
 *	Used to:		Start processing.
 *	Return:			None.
 */
-void Start(Bitmap^ Img, String^ FilePath, int Pick)
+void Start(Drawing::Bitmap^ Img, String^ FilePath, int Pick)
 {
-	Bitmap^ ResultBitmap = nullptr;
+	Drawing::Bitmap^ ResultBitmap = nullptr;
 
 	EProcess Process = static_cast<EProcess>(Pick);
 	switch (Process)

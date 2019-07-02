@@ -1,8 +1,9 @@
 
 #include "../include/AutoTresholding.h"
 
-AutoTresholding::AutoTresholding( Bitmap^ Image ): Img(Image) 
+AutoTresholding::AutoTresholding(Drawing::Bitmap^ Image )
 {
+	Img = Image;
 	Histogram = new array<int, 256>;
 	Histogram->fill(0);
 }
@@ -18,17 +19,17 @@ AutoTresholding::~AutoTresholding()
 *	Used to:		Start image processing. Prepare, and compute.
 *	Return:			Computed new Bitmap.
 */
-Bitmap ^ AutoTresholding::Compute()
+Drawing::Bitmap ^ AutoTresholding::Compute()
 {
 	/* Convert image to grayscale */
-	if (Img->PixelFormat == Imaging::PixelFormat::Format24bppRgb)
+	if (Img->PixelFormat == Drawing::Imaging::PixelFormat::Format24bppRgb)
 	{
 		Rgb2Gray();
 	}
 	else		/* Change Grayscale to 3 same channel. */
 	{
-		Rectangle BBox = Rectangle(0, 0, Img->Width, Img->Height);
-		Bitmap^ clonedOne = Img->Clone(BBox, Imaging::PixelFormat::Format24bppRgb);
+		System::Drawing::Rectangle BBox = System::Drawing::Rectangle(0, 0, Img->Width, Img->Height);
+		Drawing::Bitmap^ clonedOne = Img->Clone(BBox, Drawing::Imaging::PixelFormat::Format24bppRgb);
 		Img = clonedOne;
 	}
 
@@ -70,11 +71,11 @@ void AutoTresholding::Rgb2Gray()
 	{
 		for (int ky = 0; ky < Img->Height; ky++)
 		{
-			Color OldColor	= Img->GetPixel(kx, ky);
+			Drawing::Color OldColor	= Img->GetPixel(kx, ky);
 			int grayScale	= (int)((OldColor.R * 0.3f) + (OldColor.G * 0.59f) + (OldColor.B * 0.11f));			
 
 			// Grayscale image stored in 24bits bitmap instead of 8bit. Memory overhead. 
-			Img->SetPixel(kx, ky, Color::FromArgb(grayScale, grayScale, grayScale));
+			Img->SetPixel(kx, ky, Drawing::Color::FromArgb(grayScale, grayScale, grayScale));
 
 		}
 	}
@@ -141,12 +142,12 @@ void AutoTresholding::Image2Binary(int TresholdValue)
 	{
 		for (int ky = 0; ky < Img->Height; ky++)
 		{
-			Color Pixel = Img->GetPixel(kx, ky);
+			Drawing::Color Pixel = Img->GetPixel(kx, ky);
 			
 			if (Pixel.R > TresholdValue)
-				Img->SetPixel(kx, ky, Color::FromArgb(255, 255, 255));
+				Img->SetPixel(kx, ky, Drawing::Color::FromArgb(255, 255, 255));
 			else
-				Img->SetPixel(kx, ky, Color::FromArgb(0, 0, 0));
+				Img->SetPixel(kx, ky, Drawing::Color::FromArgb(0, 0, 0));
 		}
 	}
 }

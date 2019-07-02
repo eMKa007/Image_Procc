@@ -12,13 +12,13 @@
 public ref class AutoTresholding
 {
 	public:
-		AutoTresholding( Bitmap^ Image );
+		AutoTresholding(Drawing::Bitmap^ Image );
 		~AutoTresholding();
-		
-		Bitmap^ Compute();
+
+		Drawing::Bitmap^ Compute();
 
 	private:
-		Bitmap^ Img;
+		Drawing::Bitmap^ Img;
 		array<int, 256>* Histogram;
 
 		void Rgb2Gray();

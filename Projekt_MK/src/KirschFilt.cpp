@@ -1,6 +1,6 @@
 #include "../include/KirschFilt.h"
 
-KirschFilt::KirschFilt(Bitmap^ InputImage)
+KirschFilt::KirschFilt(Drawing::Bitmap^ InputImage)
 {
 	KirschMasks = new array< array< int, 9>*, 8>;
 	KirschMasks->fill(0);
@@ -14,19 +14,19 @@ KirschFilt::KirschFilt(Bitmap^ InputImage)
 	FillKirschMasks();
 
 	// If Input image is different from 24bits depth- clone it to 24bits depth.
-	if (InputImage->PixelFormat != Imaging::PixelFormat::Format24bppRgb)
+	if (InputImage->PixelFormat != Drawing::Imaging::PixelFormat::Format24bppRgb)
 	{
-		Rectangle BBox = Rectangle(0, 0, InputImage->Width, InputImage->Height);
-		Bitmap^ clonedOne = InputImage->Clone(BBox, Imaging::PixelFormat::Format24bppRgb);
+		System::Drawing::Rectangle BBox = System::Drawing::Rectangle(0, 0, InputImage->Width, InputImage->Height);
+		Drawing::Bitmap^ clonedOne = InputImage->Clone(BBox, Drawing::Imaging::PixelFormat::Format24bppRgb);
 		InputImage = clonedOne;
 	}
 
 	// Create new bitmap, Replicate border, and fill like input image.
-	Img = gcnew Bitmap(InputImage->Width + 2, InputImage->Height + 2, InputImage->PixelFormat);
+	Img = gcnew Drawing::Bitmap(InputImage->Width + 2, InputImage->Height + 2, InputImage->PixelFormat);
 	ReplicateBorderValues(Img, InputImage);
 
 	//Create new Bitmap for output image.
-	OutputImage = gcnew Bitmap(InputImage->Width, InputImage->Height, InputImage->PixelFormat);
+	OutputImage = gcnew Drawing::Bitmap(InputImage->Width, InputImage->Height, InputImage->PixelFormat);
 }
 
 KirschFilt::~KirschFilt() 
@@ -45,16 +45,16 @@ KirschFilt::~KirschFilt()
 *	Used to:		Start image processing. Prepare, and compute.
 *	Return:			Computed new Bitmap.
 */
-Bitmap^ KirschFilt::Compute()
+Drawing::Bitmap^ KirschFilt::Compute()
 {
 	switch (Img->PixelFormat)
 	{
-		case Imaging::PixelFormat::Format24bppRgb:
+		case Drawing::Imaging::PixelFormat::Format24bppRgb:
 		{
 			FiltChannelsRGB();
 		} break;
 
-		case Imaging::PixelFormat::Format8bppIndexed:
+		case Drawing::Imaging::PixelFormat::Format8bppIndexed:
 		{
 			
 		} break;
@@ -134,7 +134,7 @@ void KirschFilt::RotateMask45(array<int, 9>* Mask)
 *	Used to:		Replicate border from Image to TempImage
 *	Return:			None. TempImage is filled.
 */
-void KirschFilt::ReplicateBorderValues(Bitmap ^ TempImage, System::Drawing::Bitmap ^ Image)
+void KirschFilt::ReplicateBorderValues(Drawing::Bitmap ^ TempImage, System::Drawing::Bitmap ^ Image)
 {
 	//Copy Left-Top corner.
 	TempImage->SetPixel(0, 0, Image->GetPixel(0, 0));
@@ -189,19 +189,18 @@ void KirschFilt::FiltChannelsRGB()
 			MaxBValue = 0;
 
 			/* Get all pixels used in this moment filtration */
-			Color Px1 = Img->GetPixel(x - 1, y - 1);
-			Color Px2 = Img->GetPixel(x,	 y - 1);
-			Color Px3 = Img->GetPixel(x + 1, y - 1);
-			Color Px4 = Img->GetPixel(x - 1, y);
-			Color Px5 = Img->GetPixel(x,	 y);
-			Color Px6 = Img->GetPixel(x + 1, y);
-			Color Px7 = Img->GetPixel(x - 1, y + 1);
-			Color Px8 = Img->GetPixel(x,	 y + 1);
-			Color Px9 = Img->GetPixel(x + 1, y + 1);
-
+			Drawing::Color Px1 = Img->GetPixel(x - 1, y - 1);
+			Drawing::Color Px2 = Img->GetPixel(x,	 y - 1);
+			Drawing::Color Px3 = Img->GetPixel(x + 1, y - 1);
+			Drawing::Color Px4 = Img->GetPixel(x - 1, y);
+			Drawing::Color Px5 = Img->GetPixel(x,	 y);
+			Drawing::Color Px6 = Img->GetPixel(x + 1, y);
+			Drawing::Color Px7 = Img->GetPixel(x - 1, y + 1);
+			Drawing::Color Px8 = Img->GetPixel(x,	 y + 1);
+			Drawing::Color Px9 = Img->GetPixel(x + 1, y + 1);
 
 			/* Compute Values for Central pixel with 8 Kirsch Masks. */
-			for (int i = 0; i < KirschMasks->size(); i++)
+			for (unsigned int i = 0; i < KirschMasks->size(); i++)
 			{
 				int PixValueR = 0;
 				int PixValueG = 0;
@@ -243,7 +242,7 @@ void KirschFilt::FiltChannelsRGB()
 			}
 			
 			// Pick Maximum One from each one channel.
-			OutputImage->SetPixel(x-1, y-1, Color::FromArgb( 
+			OutputImage->SetPixel(x-1, y-1, Drawing::Color::FromArgb( 
 				MaxRValue > 255 ? 255 : MaxRValue,
 				MaxGValue > 255 ? 255 : MaxGValue,
 				MaxBValue > 255 ? 255 : MaxBValue) );

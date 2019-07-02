@@ -1,17 +1,17 @@
 
 #include "../include/CloseOpenLinear.h"
 
-CloseOpenLinear::CloseOpenLinear(Bitmap ^ InputImage)
+CloseOpenLinear::CloseOpenLinear(Drawing::Bitmap ^ InputImage)
 {
-	if (InputImage->PixelFormat != Imaging::PixelFormat::Format24bppRgb)
+	if (InputImage->PixelFormat != Drawing::Imaging::PixelFormat::Format24bppRgb)
 	{
-		Rectangle BBox = Rectangle(0, 0, InputImage->Width, InputImage->Height);
-		Bitmap^ clonedOne = InputImage->Clone(BBox, Imaging::PixelFormat::Format24bppRgb);
+		System::Drawing::Rectangle BBox = System::Drawing::Rectangle(0, 0, InputImage->Width, InputImage->Height);
+		Drawing::Bitmap^ clonedOne = InputImage->Clone(BBox, Drawing::Imaging::PixelFormat::Format24bppRgb);
 		InputImage = clonedOne;
 	}
 
 	Img = InputImage;
-	OutputImage = gcnew Bitmap( Img->Width, Img->Height, Imaging::PixelFormat::Format24bppRgb);
+	OutputImage = gcnew Drawing::Bitmap( Img->Width, Img->Height, Drawing::Imaging::PixelFormat::Format24bppRgb);
 
 	CreateStructuralElement( GetLength(), GetDegree() );
 	
@@ -29,7 +29,7 @@ CloseOpenLinear::~CloseOpenLinear()
 *	Used to:		Start image close processing.
 *	Return:			Bitmap^ Image* - output computed image
 */
-Bitmap^ CloseOpenLinear::imclose()
+Drawing::Bitmap^ CloseOpenLinear::imclose()
 {
 	return Erode(Dilate( Img ));
 }
@@ -40,7 +40,7 @@ Bitmap^ CloseOpenLinear::imclose()
 *	Used to:		Start image open processing.
 *	Return:			Bitmap^ Image* - output computed image
 */
-Bitmap^ CloseOpenLinear::imopen()
+Drawing::Bitmap^ CloseOpenLinear::imopen()
 {
 	return Dilate( Erode( Img ) );
 }
@@ -220,7 +220,7 @@ int CloseOpenLinear::GetDegree()
 *	Used to:		Apply Dilatation with linear element to input image.
 *	Return:			None. Output Image is updated.
 */
-Bitmap^ CloseOpenLinear::Dilate( Bitmap^ SourceImage )
+Drawing::Bitmap^ CloseOpenLinear::Dilate(Drawing::Bitmap^ SourceImage )
 {
 	for( int x = 0; x < Img->Width-1; x++)
 		for( int y = 0; y < Img->Height-1; y++)
@@ -253,7 +253,7 @@ Bitmap^ CloseOpenLinear::Dilate( Bitmap^ SourceImage )
 				actual_min_value = actual_min_value > Img->GetPixel(image_x, image_y).R ? Img->GetPixel(image_x, image_y).R : actual_min_value;
 			}
 
-			OutputImage->SetPixel(x, y, Color::FromArgb(actual_min_value, actual_min_value , actual_min_value) );
+			OutputImage->SetPixel(x, y, Drawing::Color::FromArgb(actual_min_value, actual_min_value , actual_min_value) );
 		}
 
 	return OutputImage;
@@ -265,7 +265,7 @@ Bitmap^ CloseOpenLinear::Dilate( Bitmap^ SourceImage )
 *	Used to:		Apply Erosion with linear element to input image.
 *	Return:			None. Output Image is updated.
 */
-Bitmap^ CloseOpenLinear::Erode( Bitmap^ SourceImage )
+Drawing::Bitmap^ CloseOpenLinear::Erode(Drawing::Bitmap^ SourceImage )
 {
 	for( int x = 0; x < Img->Width-1; x++)
 		for( int y = 0; y < Img->Height-1; y++)
@@ -298,9 +298,8 @@ Bitmap^ CloseOpenLinear::Erode( Bitmap^ SourceImage )
 				actual_max_value = actual_max_value < Img->GetPixel(image_x, image_y).R ? Img->GetPixel(image_x, image_y).R : actual_max_value;
 			}
 
-			OutputImage->SetPixel(x, y, Color::FromArgb(actual_max_value, actual_max_value , actual_max_value) );
+			OutputImage->SetPixel(x, y, Drawing::Color::FromArgb(actual_max_value, actual_max_value , actual_max_value) );
 		}
-
 
 	return OutputImage;
 }

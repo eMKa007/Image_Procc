@@ -13,15 +13,15 @@
 public ref class CloseOpenLinear
 {
 	public:
-		CloseOpenLinear(Bitmap^ Image);
+		CloseOpenLinear(Drawing::Bitmap^ Image);
 		~CloseOpenLinear();
 
-		Bitmap^ imclose();
-		Bitmap^ imopen();
+		Drawing::Bitmap^ imclose();
+		Drawing::Bitmap^ imopen();
 
 	private:
-		Bitmap^ Img;
-		Bitmap^ OutputImage;
+		Drawing::Bitmap^ Img;
+		Drawing::Bitmap^ OutputImage;
 		vector<int>* StructuralElement;
 
 		int structural_element_anchor_x;
@@ -36,9 +36,9 @@ public ref class CloseOpenLinear
 
 		int GetDegree();
 
-		Bitmap^ Dilate(Bitmap^ source_image);
+		Drawing::Bitmap^ Dilate(Drawing::Bitmap^ source_image);
 
-		Bitmap^ Erode(Bitmap^ source_image);
+		Drawing::Bitmap^ Erode(Drawing::Bitmap^ source_image);
 
 		void print_structural_el();
 

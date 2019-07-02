@@ -1,11 +1,11 @@
 #include "../include/ConvexHull.h"
 
-ConvexHull::ConvexHull(Bitmap ^ InputImage)
+ConvexHull::ConvexHull(Drawing::Bitmap ^ InputImage)
 {
-	if (InputImage->PixelFormat != Imaging::PixelFormat::Format24bppRgb)
+	if (InputImage->PixelFormat != Drawing::Imaging::PixelFormat::Format24bppRgb)
 	{
-		Rectangle BBox = Rectangle(0, 0, InputImage->Width, InputImage->Height);
-		Bitmap^ clonedOne = InputImage->Clone(BBox, Imaging::PixelFormat::Format24bppRgb);
+		System::Drawing::Rectangle BBox = System::Drawing::Rectangle(0, 0, InputImage->Width, InputImage->Height);
+		Drawing::Bitmap^ clonedOne = InputImage->Clone(BBox, Drawing::Imaging::PixelFormat::Format24bppRgb);
 		InputImage = clonedOne;
 	}
 
@@ -40,7 +40,7 @@ ConvexHull::~ConvexHull()
 *	Used to:		Main function. Used to fill masks, and start computing.
 *	Return:			None. Convex Hull of image is created.
 */
-Bitmap^ ConvexHull::Compute()
+Drawing::Bitmap^ ConvexHull::Compute()
 {
 	/* Create masks and process image. */
 	fill_masks();
@@ -119,10 +119,10 @@ void ConvexHull::rotate_mask45(array<int, 9>* Mask)
 *	Used to:		Compute convex hull of input binary image.
 *	Return:			None. Output image is updated.
 */
-Bitmap^ ConvexHull::compute_hull()
+Drawing::Bitmap^ ConvexHull::compute_hull()
 {
 	/* Init number of pixels changed to some big value */
-	array<Color*, 9>* Pixels = new array<Color*, 9>;
+	array<Drawing::Color*, 9>* Pixels = new array<Drawing::Color*, 9>;
 
 	/* Initialise pixels array */
 	for( int i = 0; i< 9; i++)
@@ -175,7 +175,7 @@ Bitmap^ ConvexHull::compute_hull()
 					/* If any mask match, fill pixel at coordinates x,y and go to nex one. */
 					if( match_pixels >= 6)
 					{
-						SourceImage->SetPixel(x, y, Color::FromArgb(255, 255, 255) );
+						SourceImage->SetPixel(x, y, Drawing::Color::FromArgb(255, 255, 255) );
 						pixel_changed++;
 						break;
 					}

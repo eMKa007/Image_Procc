@@ -11,14 +11,14 @@
 public ref class KirschFilt
 {
 	public:
-		KirschFilt(Bitmap^ Image);
+		KirschFilt(Drawing::Bitmap^ Image);
 		~KirschFilt();
 
-		Bitmap^ Compute();
+		Drawing::Bitmap^ Compute();
 
 	private:
-		Bitmap^ Img;
-		Bitmap^ OutputImage;
+		Drawing::Bitmap^ Img;
+		Drawing::Bitmap^ OutputImage;
 		array< array<int, 9>*, 8>* KirschMasks;
 
 		/* -------------------  Auxiliary Functions -------------------  */
@@ -26,7 +26,7 @@ public ref class KirschFilt
 
 		void RotateMask45(array<int, 9>* Mask);
 
-		void ReplicateBorderValues(System::Drawing::Bitmap ^ TempImage, System::Drawing::Bitmap ^ Image);
+		void ReplicateBorderValues(Drawing::Bitmap ^ TempImage, Drawing::Bitmap ^ Image);
 
 		void FiltChannelsRGB();
 };

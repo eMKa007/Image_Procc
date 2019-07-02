@@ -17,11 +17,11 @@ enum class EProcess
 
 String^ ReadArgument(int argc, char* InputArgument);
 
-Bitmap^ ReadImage(String^ FilePath);
+Drawing::Bitmap^ ReadImage(String^ FilePath);
 
 int PickProcess();
 
-void Start(Bitmap^ Image, String^ FilePath, int Pick);
+void Start(Drawing::Bitmap^ Image, String^ FilePath, int Pick);
 
 void PrintUsage();
 

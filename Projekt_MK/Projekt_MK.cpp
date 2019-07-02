@@ -3,12 +3,18 @@
 
 #include "include/Application.h"
 
+
 int main( int argc, char* argv[])
 {
+	Fl_Window window(200, 200, "Window title");
+    Fl_Box box(0, 0, 200, 200, "Hey, I mean, Hello, World!");
+    window.show();
+    Fl::run();
+
 	try
 	{
 		String^ FilePath = gcnew String( ReadArgument(argc, argv[1]) );
-		Bitmap^ InputImage = ReadImage( FilePath );
+		Drawing::Bitmap^ InputImage = ReadImage( FilePath );
 
 		int Pick = PickProcess();
 		if (Pick != 0)
