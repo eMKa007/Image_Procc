@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Headers.h"
+#include "Application_GUI.h"
 #include "AutoTresholding.h"
 #include "KirschFilt.h"
 #include "CloseOpenLinear.h"

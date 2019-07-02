@@ -3,8 +3,19 @@
 
 #include "include/Application.h"
 
+
+
 int main( int argc, char* argv[])
 {
+	Fl_Window win( 300,200,"Testing" );
+    win.begin();
+    Fl_Button but( 10, 150, 150, 30, "Open Image File" );
+    win.end();
+    but.callback( OpenFile_cb );
+    win.show();
+    Fl::run();
+
+
 	try
 	{
 		String^ FilePath = gcnew String( ReadArgument(argc, argv[1]) );
