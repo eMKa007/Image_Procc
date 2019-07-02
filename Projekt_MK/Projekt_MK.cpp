@@ -3,13 +3,15 @@
 
 #include "include/Application.h"
 
-
+Fl_Box* MainPicetureBox;
+Fl_PNG_Image* InputImage;
 
 int main( int argc, char* argv[])
 {
-	Fl_Window win( 300,200,"Testing" );
+	Fl_Window win( 900,500,"Testing" );
     win.begin();
-    Fl_Button but( 10, 150, 150, 30, "Open Image File" );
+    Fl_Button but( 10, 450, 150, 30, "Open Image File" );
+	MainPicetureBox = new Fl_Box(50, 50, 350, 350);
     win.end();
     but.callback( OpenFile_cb );
     win.show();
