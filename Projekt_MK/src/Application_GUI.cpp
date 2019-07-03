@@ -21,9 +21,16 @@ void OpenFile_cb( Fl_Widget* o, void* )
 		{
 			printf("Picked: %s\n", fnfc.filename());
 			InputImage = new Fl_PNG_Image( fnfc.filename() );
-			MainPicetureBox->image(InputImage);
 			
+			MainPicetureBox->image(InputImage);
 			MainPicetureBox->redraw();
+
+			strcpy(ImageSource, fnfc.filename());
+
+			sprintf(InfoBox_label, "\nSource: %s\nWidth: %d\t\nHeight: %d\t", ImageSource, InputImage->w() ,InputImage->h());
+
+			InfoBox->label( (const char*)InfoBox_label );
+
 			break;
 		}
 	}
@@ -32,4 +39,12 @@ void OpenFile_cb( Fl_Widget* o, void* )
 void Exit_cb( Fl_Widget* o, void* )
 {
 	MainWindow->hide();
+}
+
+void KirschFilt_cb( Fl_Widget* o, void* ) 
+{
+	if( InputImage == NULL )
+		return;
+
+
 }

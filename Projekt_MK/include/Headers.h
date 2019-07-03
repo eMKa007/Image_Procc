@@ -12,6 +12,8 @@
 #include <FL/Fl_PNG_Image.H>
 
 #include <iostream>
+#include <sstream>
+#include <string>
 #include <array>
 #include <vector>
 #include <algorithm>
