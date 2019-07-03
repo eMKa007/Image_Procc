@@ -1,6 +1,6 @@
 #include  "../include/Application_GUI.h"
 
-void OpenFile_cb( Fl_Widget* o ) 
+void OpenFile_cb( Fl_Widget* o, void* ) 
 {
 	Fl_Native_File_Chooser fnfc;
 	fnfc.title("Pick valid image file. :)");
@@ -22,8 +22,14 @@ void OpenFile_cb( Fl_Widget* o )
 			printf("Picked: %s\n", fnfc.filename());
 			InputImage = new Fl_PNG_Image( fnfc.filename() );
 			MainPicetureBox->image(InputImage);
+			
 			MainPicetureBox->redraw();
 			break;
 		}
 	}
+}
+
+void Exit_cb( Fl_Widget* o, void* )
+{
+	MainWindow->hide();
 }

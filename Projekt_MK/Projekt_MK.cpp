@@ -3,21 +3,37 @@
 
 #include "include/Application.h"
 
+Fl_Window* MainWindow;
 Fl_Box* MainPicetureBox;
-Fl_PNG_Image* InputImage;
+Fl_Box* InfoBox;
+Fl_Menu_Bar* MenuBar;
+Fl_Image* InputImage;
 
 int main( int argc, char* argv[])
 {
-	Fl_Window win( 900,500,"Testing" );
-    win.begin();
-    Fl_Button but( 10, 450, 150, 30, "Open Image File" );
-	MainPicetureBox = new Fl_Box(50, 50, 350, 350);
-    win.end();
-    but.callback( OpenFile_cb );
-    win.show();
-    Fl::run();
+	/* Create Main Application Window */
+	MainWindow = new Fl_Window( 900,650,"Testing" );
+    MainWindow->begin();
 
+	/* Add All necessary widgets */
+    MenuBar = new Fl_Menu_Bar(0, 0, MainWindow->w(), 30 );
+	MenuBar->add("File/&Open File", 0,		(Fl_Callback*)OpenFile_cb);
+	MenuBar->add("File/&Exit", 0,			(Fl_Callback*)Exit_cb);
+	MenuBar->add("Entropy Treshold.", 0,		(Fl_Callback*)Exit_cb);
+	MenuBar->add("Open|Close Image", 0,		(Fl_Callback*)Exit_cb);
+	MenuBar->add("Convex Hull", 0,			(Fl_Callback*)Exit_cb);
+	MenuBar->add("Kirsch Filtration", 0,		(Fl_Callback*)Exit_cb);
 
+	MainPicetureBox = new Fl_Box(FL_THIN_DOWN_BOX, 10, 40, 600, 450, "MainPicetureBox");
+	InfoBox = new Fl_Box( FL_DOWN_BOX, 10, 500, 450, 140, "InfoBox" );
+
+	MainWindow->end();
+
+    MainWindow->show();
+    
+	Fl::run();
+
+	/*
 	try
 	{
 		String^ FilePath = gcnew String( ReadArgument(argc, argv[1]) );
@@ -36,6 +52,7 @@ int main( int argc, char* argv[])
 		printf("\nException catched: %s\n\n", Ex);
 		printf("|===========================================|\n\n");
 	}
+	*/
 
     return 0;
 }
