@@ -40,7 +40,7 @@ ___
 [usage1]: https://raw.githubusercontent.com/eMKa007/Image_Procc/master/Projekt_MK/TestImages/usage1.png "Transformation pick."
 
 ## Project Structure:
-<img src="https://raw.githubusercontent.com/eMKa007/Image_Procc/master/Projekt_MK/TestImages/Image-Processing-Projekt-MK.png" width="650" height="500" />
+<img src="https://raw.githubusercontent.com/eMKa007/Image_Procc/master/Projekt_MK/TestImages/Image%20Processing%20Projekt_MK.png" width="650" height="500" />
 
 ### TODO: 
   * Convert pointers to smart ones.
